@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken')
 const { jwtkey } = require('../keys');
 const { json } = require('body-parser');
 const router = express.Router()
+const User = mongoose.model('user')
 const FeeCategory = mongoose.model('FeeCategory')
 const FeeSubCategory = mongoose.model('FeeSubCategory')
 const WaiverCategory = mongoose.model('WaiverCategory')
@@ -40,6 +41,33 @@ var storage = multer.diskStorage({
 })
 var upload = multer({ storage: storage })
 //end code for images
+
+
+// signin Routes
+    router.post('/signin', async (req, res) => {
+        console.log("yes im vineet")
+        const { username, password,} = req.body
+        console.log(req.body)
+        console.log(username, password)
+        if (!username || !password) {
+            return res.status(422).send({ error: "must provide email or password2" })
+        }
+        const user = await User.findOne({ username ,password})
+        console.log(user)
+        if (!user) {
+            return res.status(422).send({ error: "must provide email or password3" })
+        }
+        try {
+            // await user.comparePassword(password);
+            const token = jwt.sign({ userId: user.id }, jwtkey)
+            console.log(user.id)
+            res.send({ token: token, userid: user.id, user})
+        }
+        catch (err) {
+            return res.status(422).send({ error: "must provide email or password4" })
+        }
+    })
+// End Signin routes
 
 // Start Fee category routes
 router.post('/StoreFeeCatogory', upload.single('image'), async (req, res) => {
@@ -302,7 +330,7 @@ router.post('/StoreCategory', upload.single('image'), async (req, res) => {
     }
     })
     
-    router.get('/getCategory', async (req, res) => {
+    router.get('/getCastCategory', async (req, res) => {
         try {
             const data = await Category.find()
             if (data) {
@@ -320,9 +348,9 @@ router.post('/StoreCategory', upload.single('image'), async (req, res) => {
 // Start Vehicle routes
 router.post('/StoreVehicle', upload.single('image'), async (req, res) => {
     console.log(req.body);
-    const {vehicle_type,vehicle_no,root,driver_name,contact_no} = req.body;
+    const {vehicle_type,vehicle_no,root,root_description,driver_name,contact_no} = req.body;
     try {
-        const Vehicle_data = new Vehicle({vehicle_type,vehicle_no,root,driver_name,contact_no})
+        const Vehicle_data = new Vehicle({vehicle_type,vehicle_no,root,root_description,driver_name,contact_no})
         await Vehicle_data.save();
         if (Vehicle_data) {
             console.log("Vehicle_data")
@@ -336,6 +364,21 @@ router.post('/StoreVehicle', upload.single('image'), async (req, res) => {
         return res.status(422).send(err.message)
      
     }
+    })
+
+       
+    router.get('/getVehicle', async (req, res) => {
+        try {
+            const data = await Vehicle.find()
+            if (data) {
+                console.log(data[0])
+            }
+            console.log(data[0])
+            res.send(data)
+        }
+        catch (err) {
+            return res.status(422).send({ error: "error for fetching food data" })
+        }
     })
 // end Vehicle routes
 
@@ -415,9 +458,9 @@ router.post('/StoreSubject', upload.single('image'), async (req, res) => {
 // Start House routes
 router.post('/StoreHouse', upload.single('image'), async (req, res) => {
     console.log(req.body);
-    const {house_name} = req.body;
+    const {house_name,color} = req.body;
     try {
-        const House_data = new House({house_name})
+        const House_data = new House({house_name,color})
         await House_data.save();
         if (House_data) {
             console.log("House_data")
@@ -484,32 +527,17 @@ router.post('/StoreParent', upload.single('image'), async (req, res) => {
             return res.status(422).send({ error: "error for fetching food data" })
         }
     })
-    router.post('/singleparentdata', async (req, res) => {
-        console.log('yes im in')
-        const { account_no } = req.body;
-        try {
-           const data = await Parent.find({ account_no })
-            if (data) {
-                console.log(data[0])
-            }
-            
-            res.send(data)
-        }
-        catch (err) {
-            return res.status(422).send({ error: "error for fetching profile data" })
-        }
-    })
 // end Parent routes
 
 
 
 // Start Student routes
 router.post('/StoreStudent', upload.single('image'), async (req, res) => {
-    console.log(req.body);
+    console.log("yes i am in")
     const image = req.file.path
-    const {session,date_of_admission,parent,account_no,admission_no,security_no,old_admission_no,aadhar_no,class_name,section,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,last_school,balance,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details} = req.body;
+    const {session,date_of_admission,parent,admission_no,security_no,old_admission_no,aadhar_no,class_name,section,subjects,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,last_school,balance,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details,account_no,father_name,mother_name,father_occu,father_designation,father_annual_income,mother_occu,mother_desgination,mother_annual_income,parent_address,parent_city,parent_state,parent_country,parent_phone,parent_mobile,gaurdian_name,gaurdian_occu,gaurdian_designation,gaurdian_annual_income,gaurdian_address,gaurdian_city,gaurdian_state,gaurdian_country,gaurdian_phone,gaurdian_mobile} = req.body;
     try {
-        const Student_data = new Student({image,session,date_of_admission,parent,account_no,admission_no,security_no,old_admission_no,aadhar_no,class_name,section,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,last_school,balance,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details})
+        const Student_data = new Student({image,session,date_of_admission,parent,admission_no,security_no,old_admission_no,aadhar_no,class_name,section,subjects,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,last_school,balance,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details,account_no,father_name,mother_name,father_occu,father_designation,father_annual_income,mother_occu,mother_desgination,mother_annual_income,parent_address,parent_city,parent_state,parent_country,parent_phone,parent_mobile,gaurdian_name,gaurdian_occu,gaurdian_designation,gaurdian_annual_income,gaurdian_address,gaurdian_city,gaurdian_state,gaurdian_country,gaurdian_phone,gaurdian_mobile})
         await Student_data.save();
         if (Student_data) {
             console.log("Student_data")
@@ -527,15 +555,46 @@ router.post('/StoreStudent', upload.single('image'), async (req, res) => {
 
     router.get('/getStudent', async (req, res) => {
         try {
-            const data = await Student.find()
+            const data = await Student.find().sort({ _id: -1 })
             if (data) {
                 console.log(data[0])
             }
-            console.log(data[0])
+            console.log(data[0]+"finding data of single parent")
             res.send(data)
         }
         catch (err) {
             return res.status(422).send({ error: "error for fetching food data" })
+        }
+    })
+
+    router.post('/singleparentdata', async (req, res) => {
+        console.log(req.body.account_no+'yes im in')
+        const { account_no } = req.body;
+        try {
+           const data = await Student.find({ account_no })
+            if (data) {
+                console.log(data)
+            }
+            
+            res.send(data)
+        }
+        catch (err) {
+            return res.status(422).send({ error: "error for fetching profile data" })
+        }
+    })
+    router.post('/singlestudentdata', async (req, res) => {
+        console.log('yes im in')
+        const { admission_no } = req.body;
+        try {
+           const data = await Student.find({ admission_no })
+            if (data) {
+                console.log(data[0])
+            }
+            
+            res.send(data)
+        }
+        catch (err) {
+            return res.status(422).send({ error: "error for fetching profile data" })
         }
     })
 // end Student routes
@@ -582,6 +641,22 @@ router.post('/StoreStudent', upload.single('image'), async (req, res) => {
         console.log('yes im in '+class_name+" gfgdf "+section)
         try {
            const data = await FeeStructure.find({ class_name })
+            if (data) {
+                console.log(data[0])
+            }
+            
+            res.send(data)
+        }
+        catch (err) {
+            return res.status(422).send({ error: "error for fetching profile data" })
+        }
+    })
+
+    router.post('/FeesClasswise', async (req, res) => {
+        console.log('yes im in' + req.body.section)
+        const { class_name,section } = req.body;
+        try {
+           const data = await FeeStructure.find({ class_name,section })
             if (data) {
                 console.log(data[0])
             }

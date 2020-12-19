@@ -2,7 +2,7 @@ const express=require('express');
 const bodyParser=require('body-parser');
 const mongoose = require('mongoose');
 const app = express();
-const PORT = 27017;
+const PORT = 4800;
 const {mongoUrl} =require('./keys');
 require('./models/user');
 require('./models/FeeCategory');

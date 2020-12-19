@@ -14,6 +14,9 @@ const VehicleSchema = new Schema({
         type:String,        
         required:true
     }, 
+    root_description:{
+        type:String,        
+    }, 
     driver_name:{
         type:String,        
         required:true
