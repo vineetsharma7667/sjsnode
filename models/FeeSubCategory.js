@@ -13,7 +13,10 @@ const feesubcategorySchema = new Schema({
     amount:{
         type:String,        
     },
-    fee_type:{
+    month:{
+        type:String,        
+    },
+    status:{
         type:String,        
     }
 

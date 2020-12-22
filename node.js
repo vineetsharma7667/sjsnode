@@ -20,6 +20,7 @@ require('./models/House');
 require('./models/Parent');
 require('./models/Student');
 require('./models/FeeStructure');
+require('./models/Receipt');
 
 const requireToken= require('./middleware/requireToken');
 app.use(bodyParser.json());

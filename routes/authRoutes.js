@@ -21,6 +21,7 @@ const House = mongoose.model('House')
 const Parent = mongoose.model('Parent')
 const Student = mongoose.model('Student')
 const FeeStructure = mongoose.model('FeeStructure')
+const Receipt = mongoose.model('Receipt')
 
 
 const cors = require('cors');
@@ -106,9 +107,9 @@ router.get('/getCategory', async (req, res) => {
 
 // Start Fee Sub category routes
 router.post('/StoreFeeSubCatogory', upload.single('image'), async (req, res) => {
-    const { fee_category,fee_sub_category,amount,fee_type} = req.body;
+    const { fee_category,fee_sub_category,amount,month,status} = req.body;
     try {
-        const Fee_sub_cat = new FeeSubCategory({ fee_category,fee_sub_category,amount,fee_type})
+        const Fee_sub_cat = new FeeSubCategory({ fee_category,fee_sub_category,amount,month,status})
         await Fee_sub_cat.save();
         if (Fee_sub_cat) {
             console.log("Fee_sub_cat")
@@ -668,5 +669,28 @@ router.post('/StoreStudent', upload.single('image'), async (req, res) => {
         }
     })
 // end Fee Structure routes
+
+
+// Start Fee Receipt routes
+    router.post('/StoreReceipt', upload.single('image'), async (req, res) => {
+    console.log(req.body);
+    const {receipt_date,receipt_no,ref_receipt_no,session,admission_no,account_no,prospectus_fee,registration_fee,admission_fee,security_fee,report_card_and_diary,annual_prize_day,development_fund,school_magazin,annual_sports_day,examination_fee,med_board_reg,library_fee,tution_fee,computer_fee,science_fee,bus_fare,total_monthly_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date} = req.body;
+    try {
+        const Fee_structure_data = new Receipt({receipt_date,receipt_no,ref_receipt_no,session,admission_no,account_no,prospectus_fee,registration_fee,admission_fee,security_fee,report_card_and_diary,annual_prize_day,development_fund,school_magazin,annual_sports_day,examination_fee,med_board_reg,library_fee,tution_fee,computer_fee,science_fee,bus_fare,total_monthly_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date})
+        await Fee_structure_data.save();
+        if (Fee_structure_data) {
+            console.log("Fee_structure_data")
+        }
+        else {
+            console.log("data is not stored")
+        }
+        console.log(Fee_structure_data);
+        res.send(Fee_structure_data)
+    } catch (err) {
+        return res.status(422).send(err.message)
+     
+    }
+    })
+// End Fee Receipt routes
 module.exports = router
 
