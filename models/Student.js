@@ -44,10 +44,8 @@ const StudentSchema = new Schema({
     category:{
         type:String,        
     }, 
-
     house:{
         type:String,        
-        required:true
     }, 
     name:{
         type:String,        

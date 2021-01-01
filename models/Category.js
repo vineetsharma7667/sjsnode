@@ -3,7 +3,8 @@ const Schema = mongoose.Schema;
 // const bcrypt = require('bcrypt')
 const CategorySchema = new Schema({
     category:{
-        type:String,        
+        type:String,    
+        unique:true,    
         required:true
     }, 
     description:{

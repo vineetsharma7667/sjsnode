@@ -7,7 +7,8 @@ const feesubcategorySchema = new Schema({
         required:true
     }, 
     fee_sub_category:{
-        type:String,        
+        type:String,    
+        unique:true,    
         required:true
     }, 
     amount:{

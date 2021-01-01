@@ -137,12 +137,30 @@ router.post('/StoreFeeSubCatogory', upload.single('image'), async (req, res) => 
         catch (err) {
             return res.status(422).send({ error: "error for fetching food data" })
         }
+    }) 
+    router.put('/updateFeeSubCategory', upload.single('image') ,async (req, res) => {
+        console.log("Yes I Am In")
+        const { _id,fee_category,fee_sub_category,amount,month,status } = req.body;
+        // const image = req.file.path
+        FeeSubCategory.findByIdAndUpdate({_id},{ fee_category,fee_sub_category,amount,month,status }, function(err, result){
+            if(err){
+                res.send(err)
+            }
+            else{
+                res.send(result)
+            }
+        })
+    })
+    router.delete('/deleteFeeSubCategory', (req, res) => {
+        const { _id } = req.body
+        console.log(_id)
+        FeeSubCategory.findByIdAndRemove(_id).exec();
+        res.send({ res: "Deleted Sucessfully" })
     })
     // end Fee Sub category routes
 
 
 // Start Waiver Category routes
-
 router.post('/StoreWaiverCategory', upload.single('image'), async (req, res) => {
     console.log("yes im in");
     const { category} = req.body;
@@ -232,13 +250,15 @@ router.post('/StoreSession', upload.single('image'), async (req, res) => {
         }
         catch (err) {
             return res.status(422).send({ error: "error for fetching food data" })
+            
         }
     })
 // end Session routes
 
 
 // Start Class routes
-router.post('/StoreClass', upload.single('image'), async (req, res) => {
+router.post('/StoreClass', upload.single('image'),async (req, res) => {
+    console.log("yes im in");
     console.log(req.body);
     const {class_name,actual_class,description} = req.body;
     try {
@@ -253,8 +273,12 @@ router.post('/StoreClass', upload.single('image'), async (req, res) => {
         console.log(class_data);
         res.send(class_data)
     } catch (err) {
-        return res.status(422).send(err.message)
-     
+        console.log(err.message.toString().includes('duplicate'))
+        if(err.message.toString().includes('duplicate')){
+           var errmsg = "please enter a unique value class"+req.body.class_name +" already exist"
+           return res.send(errmsg)
+        }
+        
     }
     })
 
@@ -270,6 +294,24 @@ router.post('/StoreClass', upload.single('image'), async (req, res) => {
         catch (err) {
             return res.status(422).send({ error: "error for fetching food data" })
         }
+    })
+    router.put('/updateClass', upload.single('image') ,async (req, res) => {
+        const { _id,class_name,actual_class,description } = req.body;
+        // const image = req.file.path
+        Class.findByIdAndUpdate({_id},{  class_name,actual_class,description }, function(err, result){
+            if(err){
+                res.send(err)
+            }
+            else{
+                res.send(result)
+            }
+        })
+    })
+    router.delete('/deleteClass', (req, res) => {
+        const { _id } = req.body
+        console.log(_id)
+        Class.findByIdAndRemove(_id).exec();
+        res.send({ res: "Deleted Sucessfully" })
     })
 // end Class routes
 
@@ -308,6 +350,24 @@ router.post('/StoreSection', upload.single('image'), async (req, res) => {
             return res.status(422).send({ error: "error for fetching food data" })
         }
     })
+    router.put('/updateSection', upload.single('image') ,async (req, res) => {
+        const { _id,class_name,section,description } = req.body;
+        // const image = req.file.path
+        Section.findByIdAndUpdate({_id},{  class_name,section,description }, function(err, result){
+            if(err){
+                res.send(err)
+            }
+            else{
+                res.send(result)
+            }
+        })
+    })
+    router.delete('/deleteSection', (req, res) => {
+        const { _id } = req.body
+        console.log(_id)
+        Section.findByIdAndRemove(_id).exec();
+        res.send({ res: "Deleted Sucessfully" })
+    })
 // end Section routes
 
 
@@ -343,6 +403,24 @@ router.post('/StoreCategory', upload.single('image'), async (req, res) => {
         catch (err) {
             return res.status(422).send({ error: "error for fetching food data" })
         }
+    })
+    router.put('/updateCategory', upload.single('image') ,async (req, res) => {
+        const { _id,category,description } = req.body;
+        // const image = req.file.path
+        Category.findByIdAndUpdate({_id},{  category,description }, function(err, result){
+            if(err){
+                res.send(err)
+            }
+            else{
+                res.send(result)
+            }
+        })
+    })
+    router.delete('/deleteCategory', (req, res) => {
+        const { _id } = req.body
+        console.log(_id)
+        Category.findByIdAndRemove(_id).exec();
+        res.send({ res: "Deleted Sucessfully" })
     })
 // end Category routes
 
@@ -381,6 +459,24 @@ router.post('/StoreVehicle', upload.single('image'), async (req, res) => {
             return res.status(422).send({ error: "error for fetching food data" })
         }
     })
+    router.put('/updateVehicle', upload.single('image') ,async (req, res) => {
+        const { _id,vehicle_type,vehicle_no,root,root_description,driver_name,contact_no } = req.body;
+        // const image = req.file.path
+        Vehicle.findByIdAndUpdate({_id},{vehicle_type,vehicle_no,root,root_description,driver_name,contact_no }, function(err, result){
+            if(err){
+                res.send(err)
+            }
+            else{
+                res.send(result)
+            }
+        })
+    })
+    router.delete('/deleteVehicle', (req, res) => {
+        const { _id } = req.body
+        console.log(_id)
+        VehicleType.findByIdAndRemove(_id).exec();
+        res.send({ res: "Deleted Sucessfully" })
+    })
 // end Vehicle routes
 
 
@@ -416,6 +512,24 @@ router.post('/StoreVehicleType', upload.single('image'), async (req, res) => {
         catch (err) {
             return res.status(422).send({ error: "error for fetching food data" })
         }
+    })
+    router.put('/updateVehicleType', upload.single('image') ,async (req, res) => {
+        const { _id,vehicle_type } = req.body;
+        // const image = req.file.path
+        VehicleType.findByIdAndUpdate({_id},{  vehicle_type }, function(err, result){
+            if(err){
+                res.send(err)
+            }
+            else{
+                res.send(result)
+            }
+        })
+    })
+    router.delete('/deleteVehicleType', (req, res) => {
+        const { _id } = req.body
+        console.log(_id)
+        VehicleType.findByIdAndRemove(_id).exec();
+        res.send({ res: "Deleted Sucessfully" })
     })
 // end Vehicle Type routes
 
@@ -454,6 +568,25 @@ router.post('/StoreSubject', upload.single('image'), async (req, res) => {
             return res.status(422).send({ error: "error for fetching food data" })
         }
     })
+    router.put('/updateSubject', upload.single('image') ,async (req, res) => {
+        console.log("Yes I Am In")
+        const { _id,class_name,subject,subject_code,board_code,order_no,description } = req.body;
+        // const image = req.file.path
+        Subject.findByIdAndUpdate({_id},{ class_name,subject,subject_code,board_code,order_no,description }, function(err, result){
+            if(err){
+                res.send(err)
+            }
+            else{
+                res.send(result)
+            }
+        })
+    })
+    router.delete('/deleteSubject', (req, res) => {
+        const { _id } = req.body
+        console.log(_id)
+        Subject.findByIdAndRemove(_id).exec();
+        res.send({ res: "Deleted Sucessfully" })
+    })
 // end Subject routes
 
 // Start House routes
@@ -489,6 +622,25 @@ router.post('/StoreHouse', upload.single('image'), async (req, res) => {
         catch (err) {
             return res.status(422).send({ error: "error for fetching food data" })
         }
+    })
+    router.put('/updateHouse', upload.single('image') ,async (req, res) => {
+        console.log("Yes I Am In")
+        const { _id,house_name,color } = req.body;
+        // const image = req.file.path
+        House.findByIdAndUpdate({_id},{ house_name,color }, function(err, result){
+            if(err){
+                res.send(err)
+            }
+            else{
+                res.send(result)
+            }
+        })
+    })
+    router.delete('/deleteHouse', (req, res) => {
+        const { _id } = req.body
+        console.log(_id)
+        House.findByIdAndRemove(_id).exec();
+        res.send({ res: "Deleted Sucessfully" })
     })
 // end House routes
 
@@ -536,9 +688,10 @@ router.post('/StoreParent', upload.single('image'), async (req, res) => {
 router.post('/StoreStudent', upload.single('image'), async (req, res) => {
     console.log("yes i am in")
     const image = req.file.path
-    const {session,date_of_admission,parent,admission_no,security_no,old_admission_no,aadhar_no,class_name,section,subjects,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,last_school,balance,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details,account_no,father_name,mother_name,father_occu,father_designation,father_annual_income,mother_occu,mother_desgination,mother_annual_income,parent_address,parent_city,parent_state,parent_country,parent_phone,parent_mobile,gaurdian_name,gaurdian_occu,gaurdian_designation,gaurdian_annual_income,gaurdian_address,gaurdian_city,gaurdian_state,gaurdian_country,gaurdian_phone,gaurdian_mobile} = req.body;
+    const balance=0
+    const {session,date_of_admission,parent,admission_no,security_no,old_admission_no,aadhar_no,class_name,section,subjects,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,last_school,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details,account_no,father_name,mother_name,father_occu,father_designation,father_annual_income,mother_occu,mother_desgination,mother_annual_income,parent_address,parent_city,parent_state,parent_country,parent_phone,parent_mobile,gaurdian_name,gaurdian_occu,gaurdian_designation,gaurdian_annual_income,gaurdian_address,gaurdian_city,gaurdian_state,gaurdian_country,gaurdian_phone,gaurdian_mobile} = req.body;
     try {
-        const Student_data = new Student({image,session,date_of_admission,parent,admission_no,security_no,old_admission_no,aadhar_no,class_name,section,subjects,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,last_school,balance,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details,account_no,father_name,mother_name,father_occu,father_designation,father_annual_income,mother_occu,mother_desgination,mother_annual_income,parent_address,parent_city,parent_state,parent_country,parent_phone,parent_mobile,gaurdian_name,gaurdian_occu,gaurdian_designation,gaurdian_annual_income,gaurdian_address,gaurdian_city,gaurdian_state,gaurdian_country,gaurdian_phone,gaurdian_mobile})
+        const Student_data = new Student({image,session,date_of_admission,balance,parent,admission_no,security_no,old_admission_no,aadhar_no,class_name,section,subjects,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,last_school,balance,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details,account_no,father_name,mother_name,father_occu,father_designation,father_annual_income,mother_occu,mother_desgination,mother_annual_income,parent_address,parent_city,parent_state,parent_country,parent_phone,parent_mobile,gaurdian_name,gaurdian_occu,gaurdian_designation,gaurdian_annual_income,gaurdian_address,gaurdian_city,gaurdian_state,gaurdian_country,gaurdian_phone,gaurdian_mobile})
         await Student_data.save();
         if (Student_data) {
             console.log("Student_data")
@@ -598,15 +751,33 @@ router.post('/StoreStudent', upload.single('image'), async (req, res) => {
             return res.status(422).send({ error: "error for fetching profile data" })
         }
     })
+
+    router.put('/updateStudent', upload.single('image') ,async (req, res) => {
+        console.log("Yes I Am In")
+        const { _id,session,date_of_admission,parent,admission_no,security_no,old_admission_no,aadhar_no,class_name,section,subjects,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,last_school,balance,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details,account_no,father_name,mother_name,father_occu,father_designation,father_annual_income,mother_occu,mother_desgination,mother_annual_income,parent_address,parent_city,parent_state,parent_country,parent_phone,parent_mobile,gaurdian_name,gaurdian_occu,gaurdian_designation,gaurdian_annual_income,gaurdian_address,gaurdian_city,gaurdian_state,gaurdian_country,gaurdian_phone,gaurdian_mobile } = req.body;
+        const image = req.file.path
+        Student.findByIdAndUpdate({_id},{ session,date_of_admission,parent,admission_no,security_no,old_admission_no,aadhar_no,class_name,section,subjects,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,last_school,balance,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details,account_no,father_name,mother_name,father_occu,father_designation,father_annual_income,mother_occu,mother_desgination,mother_annual_income,parent_address,parent_city,parent_state,parent_country,parent_phone,parent_mobile,gaurdian_name,gaurdian_occu,gaurdian_designation,gaurdian_annual_income,gaurdian_address,gaurdian_city,gaurdian_state,gaurdian_country,gaurdian_phone,gaurdian_mobile,image }, function(err, result){
+            if(err){
+                res.send(err)
+            }
+            else{
+                res.send(result)
+            }
+        })
+    })
+    router.delete('/deleteFeeStructure', (req, res) => {
+        const { _id } = req.body
+        console.log(_id)
+        FeeStructure.findByIdAndRemove(_id).exec();
+        res.send({ res: "Deleted Sucessfully" })
+    })
 // end Student routes
-
-
 // Start Fee Structure routes
     router.post('/StoreFeeStructure', upload.single('image'), async (req, res) => {
     console.log(req.body);
-    const {session,class_name,section,prospectus_fee,registration_fee,admission_fee,security_fee,total_one_time,report_card_and_diary,report_card_and_diary_pim,annual_prize_day,annual_prize_day_pim,development_fund,development_fund_pim,school_magazin,school_magazin_pim,annual_sports_day,annual_sports_day_pim,examination_fee,examination_fee_pim,med_board_reg,med_board_reg_pim,library_fee,library_fee_pim,tution_fee,computer_fee,science_fee,bus_fare,total_monthly_fee,grand_total} = req.body;
+    const {session,class_name,section,total_one_time,fees,total_monthly_fee,grand_total} = req.body;
     try {
-        const Fee_structure_data = new FeeStructure({session,class_name,section,prospectus_fee,registration_fee,admission_fee,security_fee,total_one_time,report_card_and_diary,report_card_and_diary_pim,annual_prize_day,annual_prize_day_pim,development_fund,development_fund_pim,school_magazin,school_magazin_pim,annual_sports_day,annual_sports_day_pim,examination_fee,examination_fee_pim,med_board_reg,med_board_reg_pim,library_fee,library_fee_pim,tution_fee,computer_fee,science_fee,bus_fare,total_monthly_fee,grand_total})
+        const Fee_structure_data = new FeeStructure({session,class_name,section,total_one_time,fees,total_monthly_fee,grand_total})
         await Fee_structure_data.save();
         if (Fee_structure_data) {
             console.log("Fee_structure_data")
@@ -668,15 +839,34 @@ router.post('/StoreStudent', upload.single('image'), async (req, res) => {
             return res.status(422).send({ error: "error for fetching profile data" })
         }
     })
+
+
+    router.put('/updateFeeStructure', upload.single('image') ,async (req, res) => {
+        console.log("Yes I Am In")
+        const { _id,session,class_name,section,total_one_time,fees,total_monthly_fee,grand_total } = req.body;
+        // const image = req.file.path
+        FeeStructure.findByIdAndUpdate({_id},{ session,class_name,section,total_one_time,fees,total_monthly_fee,grand_total }, function(err, result){
+            if(err){
+                res.send(err)
+            }
+            else{
+                res.send(result)
+            }
+        })
+    })
+    router.delete('/deleteFeeStructure', (req, res) => {
+        const { _id } = req.body
+        console.log(_id)
+        FeeStructure.findByIdAndRemove(_id).exec();
+        res.send({ res: "Deleted Sucessfully" })
+    })
 // end Fee Structure routes
-
-
 // Start Fee Receipt routes
     router.post('/StoreReceipt', upload.single('image'), async (req, res) => {
     console.log(req.body);
-    const {receipt_date,receipt_no,ref_receipt_no,session,admission_no,account_no,prospectus_fee,registration_fee,admission_fee,security_fee,report_card_and_diary,annual_prize_day,development_fund,school_magazin,annual_sports_day,examination_fee,med_board_reg,library_fee,tution_fee,computer_fee,science_fee,bus_fare,total_monthly_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date} = req.body;
+    const {receipt_date,receipt_no,ref_receipt_no,session,admission_no,account_no,paid_fees,paid_months,paid_amount,total_monthly_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date} = req.body;
     try {
-        const Fee_structure_data = new Receipt({receipt_date,receipt_no,ref_receipt_no,session,admission_no,account_no,prospectus_fee,registration_fee,admission_fee,security_fee,report_card_and_diary,annual_prize_day,development_fund,school_magazin,annual_sports_day,examination_fee,med_board_reg,library_fee,tution_fee,computer_fee,science_fee,bus_fare,total_monthly_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date})
+        const Fee_structure_data = new Receipt({receipt_date,receipt_no,ref_receipt_no,session,admission_no,account_no,paid_fees,paid_months,paid_amount,total_monthly_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date})
         await Fee_structure_data.save();
         if (Fee_structure_data) {
             console.log("Fee_structure_data")
@@ -690,6 +880,34 @@ router.post('/StoreStudent', upload.single('image'), async (req, res) => {
         return res.status(422).send(err.message)
      
     }
+    })
+
+    router.post('/SearchOldfee', async (req, res) => {
+        console.log('yes im in' + req.body.admission_no)
+        const { admission_no } = req.body;
+        try {
+           const data = await Receipt.find({ admission_no })
+            if (data) {
+                console.log(data[0])
+            }
+            
+            res.send(data)
+        }
+        catch (err) {
+            return res.status(422).send({ error: "error for fetching profile data" })
+        }
+    })
+    router.patch('/UpdateBalance',upload.single('image'),async (req, res) => {    
+        const { _id,balance } = req.body;
+        console.log(req.body)
+        Student.findByIdAndUpdate({_id},{balance}, function(err, result){
+            if(err){
+                res.send(err)
+            }
+            else{
+                res.send(result)
+            }
+        })
     })
 // End Fee Receipt routes
 module.exports = router

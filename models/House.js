@@ -3,7 +3,8 @@ const Schema = mongoose.Schema;
 // const bcrypt = require('bcrypt')
 const HouseSchema = new Schema({
     house_name:{
-        type:String,     
+        type:String,   
+        unique:true,  
         required:true,
     },  
     color:{

@@ -3,8 +3,9 @@ const Schema = mongoose.Schema;
 // const bcrypt = require('bcrypt')
 const ClassSchema = new Schema({
     class_name:{
-        type:String,        
-        required:true
+        type:String,    
+        unique:true,
+        required:true,
     }, 
     actual_class:{
         type:String,        

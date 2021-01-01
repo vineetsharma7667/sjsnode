@@ -3,11 +3,13 @@ const Schema = mongoose.Schema;
 // const bcrypt = require('bcrypt')
 const SessionSchema = new Schema({
     from:{
-        type:String,        
+        type:String,     
+        unique:true,   
         required:true
     }, 
     to:{
-        type:String,        
+        type:String, 
+        unique:true,       
         required:true
     }, 
 

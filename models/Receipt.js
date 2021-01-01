@@ -6,6 +6,7 @@ const FeeReceiptSchema = new Schema({
         type:String,        
     },
     receipt_no:{
+        unique:true,
         type:String,        
     },
     ref_receipt_no:{
@@ -21,53 +22,14 @@ const FeeReceiptSchema = new Schema({
     account_no:{
         type:String,        
     },
-    prospectus_fee:{
-        type:String,        
+    paid_fees:{
+        type:String
     },
-    registration_fee:{
-        type:String,        
+    paid_months:{
+        type:String
     },
-    admission_fee:{
-        type:String,        
-    },
-    security_fee:{
-        type:String,        
-    },
-    report_card_and_diary:{
-        type:String,        
-    },
-    annual_prize_day:{
-        type:String,        
-    }, 
-    development_fund:{
-        type:String,        
-    },
-    school_magazin:{
-        type:String,        
-    },
-    annual_sports_day:{
-        type:String,        
-    },
-    examination_fee:{
-        type:String,        
-    }, 
-    med_board_reg:{
-        type:String,        
-    },
-    library_fee:{
-        type:String,        
-    },
-    tution_fee:{
-        type:String,        
-    },
-    computer_fee:{
-        type:String,        
-    },
-    science_fee:{
-        type:String,        
-    },
-    bus_fare:{
-        type:String,        
+    paid_amount:{
+        type:String
     },
     total_monthly_fee:{
         type:String,        
