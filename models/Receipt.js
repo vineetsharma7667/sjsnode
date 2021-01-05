@@ -9,6 +9,10 @@ const FeeReceiptSchema = new Schema({
         unique:true,
         type:String,        
     },
+    last_fee_date:{
+        type:String,        
+    },
+    
     ref_receipt_no:{
         type:String,
     },
