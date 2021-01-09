@@ -15,7 +15,10 @@ const FeeStructureSchema = new Schema({
     fees:{
         type:String,        
     },
-    total_one_time:{
+    total_one_time_fee:{
+        type:String,        
+    },
+    total_annual_fee:{
         type:String,        
     },
     total_monthly_fee:{

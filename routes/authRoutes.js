@@ -221,9 +221,9 @@ router.post('/StoreWaiver', upload.single('image'), async (req, res) => {
 // Start Session routes
 router.post('/StoreSession', upload.single('image'), async (req, res) => {
     console.log(req.body);
-    const { from,to} = req.body;
+    const { from,to,session_code} = req.body;
     try {
-        const Session_data = new Session({from,to })
+        const Session_data = new Session({from,to,session_code })
         await Session_data.save();
         if (Session_data) {
             console.log("Session_data")
@@ -775,9 +775,9 @@ router.post('/StoreStudent', upload.single('image'), async (req, res) => {
 // Start Fee Structure routes
     router.post('/StoreFeeStructure', upload.single('image'), async (req, res) => {
     console.log(req.body);
-    const {session,class_name,section,total_one_time,fees,total_monthly_fee,grand_total} = req.body;
+    const {session,class_name,section,total_one_time_fee,fees,total_monthly_fee,total_annual_fee,grand_total} = req.body;
     try {
-        const Fee_structure_data = new FeeStructure({session,class_name,section,total_one_time,fees,total_monthly_fee,grand_total})
+        const Fee_structure_data = new FeeStructure({session,class_name,section,total_one_time_fee,fees,total_monthly_fee,total_annual_fee,grand_total})
         await Fee_structure_data.save();
         if (Fee_structure_data) {
             console.log("Fee_structure_data")
@@ -843,9 +843,9 @@ router.post('/StoreStudent', upload.single('image'), async (req, res) => {
 
     router.put('/updateFeeStructure', upload.single('image') ,async (req, res) => {
         console.log("Yes I Am In")
-        const { _id,session,class_name,section,total_one_time,fees,total_monthly_fee,grand_total } = req.body;
+        const { _id,session,class_name,section,total_one_time_fee,total_annual_fee,fees,total_monthly_fee,grand_total } = req.body;
         // const image = req.file.path
-        FeeStructure.findByIdAndUpdate({_id},{ session,class_name,section,total_one_time,fees,total_monthly_fee,grand_total }, function(err, result){
+        FeeStructure.findByIdAndUpdate({_id},{ session,class_name,section,total_one_time_fee,total_annual_fee,fees,total_monthly_fee,grand_total }, function(err, result){
             if(err){
                 res.send(err)
             }
@@ -864,9 +864,9 @@ router.post('/StoreStudent', upload.single('image'), async (req, res) => {
 // Start Fee Receipt routes
     router.post('/StoreReceipt', upload.single('image'), async (req, res) => {
     console.log(req.body);
-    const {receipt_date,receipt_no,ref_receipt_no,last_fee_date,session,admission_no,account_no,paid_fees,paid_months,paid_amount,total_monthly_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date} = req.body;
+    const {receipt_date,receipt_no,ref_receipt_no,last_fee_date,session,admission_no,account_no,paid_fees,paid_months,paid_amount,balance,total_monthly_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date} = req.body;
     try {
-        const Fee_structure_data = new Receipt({receipt_date,receipt_no,last_fee_date,ref_receipt_no,session,admission_no,account_no,paid_fees,paid_months,paid_amount,total_monthly_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date})
+        const Fee_structure_data = new Receipt({receipt_date,receipt_no,last_fee_date,ref_receipt_no,session,admission_no,account_no,paid_fees,paid_months,paid_amount,balance,total_monthly_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date})
         await Fee_structure_data.save();
         if (Fee_structure_data) {
             console.log("Fee_structure_data")
@@ -895,6 +895,19 @@ router.post('/StoreStudent', upload.single('image'), async (req, res) => {
         }
         catch (err) {
             return res.status(422).send({ error: "error for fetching profile data" })
+        }
+    })
+    router.get('/getFeeReceipt', async (req, res) => {
+        try {
+            const data = await Receipt.find()
+            if (data) {
+                console.log(data[0])
+            }
+            console.log(data[0])
+            res.send(data)
+        }
+        catch (err) {
+            return res.status(422).send({ error: "error for fetching food data" })
         }
     })
     router.patch('/UpdateBalance',upload.single('image'),async (req, res) => {    

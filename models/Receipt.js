@@ -35,6 +35,9 @@ const FeeReceiptSchema = new Schema({
     paid_amount:{
         type:String
     },
+    balance:{
+        type:String
+    },
     total_monthly_fee:{
         type:String,        
     },

@@ -7,8 +7,7 @@ const SubjectSchema = new Schema({
         required:true
     },
     subject:{
-        type:String,  
-        unique:true,      
+        type:String,           
         required:true
     }, 
     subject_code:{
