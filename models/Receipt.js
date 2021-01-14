@@ -26,7 +26,22 @@ const FeeReceiptSchema = new Schema({
     account_no:{
         type:String,        
     },
+    prospectus_fee:{
+        type:String,        
+    },
+    registration_fee:{
+        type:String,        
+    },
+    admission_fee:{
+        type:String,        
+    },
+    security_fee:{
+        type:String,        
+    },
     paid_fees:{
+        type:String
+    },
+    paid_month:{
         type:String
     },
     paid_months:{
@@ -38,7 +53,13 @@ const FeeReceiptSchema = new Schema({
     balance:{
         type:String
     },
+    total_one_time_fee:{
+        type:String,        
+    },
     total_monthly_fee:{
+        type:String,        
+    },
+    total_annual_fee:{
         type:String,        
     },
     grand_total:{

@@ -864,9 +864,9 @@ router.post('/StoreStudent', upload.single('image'), async (req, res) => {
 // Start Fee Receipt routes
     router.post('/StoreReceipt', upload.single('image'), async (req, res) => {
     console.log(req.body);
-    const {receipt_date,receipt_no,ref_receipt_no,last_fee_date,session,admission_no,account_no,paid_fees,paid_months,paid_amount,balance,total_monthly_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date} = req.body;
+    const {receipt_date,receipt_no,ref_receipt_no,last_fee_date,session,admission_no,prospectus_fee,registration_fee,admission_fee,security_fee,account_no,paid_fees,paid_month,paid_months,paid_amount,balance,total_one_time_fee,total_monthly_fee,total_annual_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date} = req.body;
     try {
-        const Fee_structure_data = new Receipt({receipt_date,receipt_no,last_fee_date,ref_receipt_no,session,admission_no,account_no,paid_fees,paid_months,paid_amount,balance,total_monthly_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date})
+        const Fee_structure_data = new Receipt({receipt_date,receipt_no,last_fee_date,ref_receipt_no,session,admission_no,prospectus_fee,registration_fee,admission_fee,security_fee,account_no,paid_fees,paid_month,paid_months,paid_amount,balance,total_one_time_fee,total_monthly_fee,total_annual_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date})
         await Fee_structure_data.save();
         if (Fee_structure_data) {
             console.log("Fee_structure_data")
