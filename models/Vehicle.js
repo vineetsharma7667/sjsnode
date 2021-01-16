@@ -25,6 +25,10 @@ const VehicleSchema = new Schema({
         type:String,        
         required:true
     }, 
+    owner_address:{
+        type:String,        
+        required:true
+    }, 
 },{timestamps: true}
 )
 mongoose.model('Vehicle',VehicleSchema);

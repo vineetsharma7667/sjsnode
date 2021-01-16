@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken')
 const { jwtkey } = require('../keys');
 const { json } = require('body-parser');
 const router = express.Router()
+
 const User = mongoose.model('user')
 const FeeCategory = mongoose.model('FeeCategory')
 const FeeSubCategory = mongoose.model('FeeSubCategory')
@@ -427,9 +428,9 @@ router.post('/StoreCategory', upload.single('image'), async (req, res) => {
 // Start Vehicle routes
 router.post('/StoreVehicle', upload.single('image'), async (req, res) => {
     console.log(req.body);
-    const {vehicle_type,vehicle_no,root,root_description,driver_name,contact_no} = req.body;
+    const {vehicle_type,vehicle_no,root,root_description,driver_name,contact_no,owner_address} = req.body;
     try {
-        const Vehicle_data = new Vehicle({vehicle_type,vehicle_no,root,root_description,driver_name,contact_no})
+        const Vehicle_data = new Vehicle({vehicle_type,vehicle_no,root,root_description,driver_name,contact_no,owner_address})
         await Vehicle_data.save();
         if (Vehicle_data) {
             console.log("Vehicle_data")
@@ -474,7 +475,7 @@ router.post('/StoreVehicle', upload.single('image'), async (req, res) => {
     router.delete('/deleteVehicle', (req, res) => {
         const { _id } = req.body
         console.log(_id)
-        VehicleType.findByIdAndRemove(_id).exec();
+        Vehicle.findByIdAndRemove(_id).exec();
         res.send({ res: "Deleted Sucessfully" })
     })
 // end Vehicle routes
