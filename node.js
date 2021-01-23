@@ -21,6 +21,7 @@ require('./models/Parent');
 require('./models/Student');
 require('./models/FeeStructure');
 require('./models/Receipt');
+require('./models/Fine');
 
 const requireToken= require('./middleware/requireToken');
 app.use(bodyParser.json());

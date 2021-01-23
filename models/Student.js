@@ -58,7 +58,16 @@ const StudentSchema = new Schema({
     }, 
     nationality:{
         type:String,        
-    }, 
+    },
+    reg_no:{
+        type:String,        
+    },
+    roll_no:{
+        type:String,        
+    },
+    board_roll_no:{
+        type:String,        
+    },
     last_school:{
         type:String,        
     }, 
@@ -127,8 +136,6 @@ const StudentSchema = new Schema({
         type:String,        
     }, 
 
-
-    
     father_name:{
         type:String,     
         required:true   
@@ -166,6 +173,17 @@ const StudentSchema = new Schema({
     },parent_country:{
         type:String,     
     },
+    parent_per_address:{
+        type:String,     
+    },
+    parent_per_city:{
+        type:String,     
+    },
+    parent_per_state:{
+        type:String,     
+    },parent_per_country:{
+        type:String,     
+    },
     parent_phone:{
         type:String,     
     },
@@ -194,6 +212,18 @@ const StudentSchema = new Schema({
         type:String,     
     },
     gaurdian_country:{
+        type:String,     
+    },
+    gaurdian_per_address:{
+        type:String,     
+    },
+    gaurdian_per_city:{
+        type:String,     
+    },
+    gaurdian_per_state:{
+        type:String,     
+    },
+    gaurdian_per_country:{
         type:String,     
     },
     gaurdian_phone:{
