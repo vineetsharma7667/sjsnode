@@ -864,9 +864,9 @@ router.post('/StoreStudent', upload.single('image'), async (req, res) => {
 // Start Fee Receipt routes
     router.post('/StoreReceipt', upload.single('image'), async (req, res) => {
     console.log(req.body);
-    const {receipt_date,receipt_no,ref_receipt_no,last_fee_date,session,admission_no,prospectus_fee,registration_fee,admission_fee,security_fee,account_no,paid_fees,paid_month,paid_months,paid_amount,balance,total_one_time_fee,total_monthly_fee,total_annual_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date} = req.body;
+    const {receipt_date,receipt_no,ref_receipt_no,last_fee_date,session,admission_no,class_name,section,prospectus_fee,registration_fee,admission_fee,security_fee,account_no,paid_fees,paid_month,paid_months,fine,paid_amount,balance,total_one_time_fee,total_monthly_fee,total_annual_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date} = req.body;
     try {
-        const Fee_structure_data = new Receipt({receipt_date,receipt_no,last_fee_date,ref_receipt_no,session,admission_no,prospectus_fee,registration_fee,admission_fee,security_fee,account_no,paid_fees,paid_month,paid_months,paid_amount,balance,total_one_time_fee,total_monthly_fee,total_annual_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date})
+        const Fee_structure_data = new Receipt({receipt_date,receipt_no,last_fee_date,ref_receipt_no,session,admission_no,class_name,section,prospectus_fee,registration_fee,admission_fee,security_fee,account_no,paid_fees,paid_month,paid_months,fine,paid_amount,balance,total_one_time_fee,total_monthly_fee,total_annual_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date})
         await Fee_structure_data.save();
         if (Fee_structure_data) {
             console.log("Fee_structure_data")
@@ -921,6 +921,74 @@ router.post('/StoreStudent', upload.single('image'), async (req, res) => {
                 res.send(result)
             }
         })
+    })
+    router.delete('/DeleteReceipt', (req, res) => {
+        const { _id } = req.body
+        console.log(_id)
+        Receipt.findByIdAndRemove(_id).exec();
+        res.send({ res: "Deleted Sucessfully" })
+    })
+
+    router.post('/VoucherByDate', async (req, res) => {
+        console.log('yes im in' + req.body.Bank)
+        const { Bank,VoucherDate } = req.body;
+        const receipt_date = VoucherDate
+        const bank = Bank
+        if(Bank ==""){
+            try {
+                const data = await Receipt.find({receipt_date})
+                 if (data) {
+                     console.log(data[0])
+                 }
+                 res.send(data)
+             }
+             catch (err) {
+                 return res.status(422).send({ error: "error for fetching profile data" })
+             }
+        }else{
+            try {
+                const data = await Receipt.find({ bank,receipt_date })
+                 if (data) {
+                     console.log(data[0])
+                 }
+                 res.send(data)
+             }
+             catch (err) {
+                 return res.status(422).send({ error: "error for fetching profile data" })
+             }
+        }
+       
+    })
+
+    router.post('/VoucherInDetail', async (req, res) => {
+        console.log('yes im in' + req.body.Bank)
+        const { Bank,VoucherDate } = req.body;
+        const receipt_date = VoucherDate
+        const bank = Bank
+        if(Bank ==""){
+            try {
+                const data = await Receipt.find({receipt_date})
+                 if (data) {
+                     console.log(data[0])
+                 }
+                 res.send(data)
+             }
+             catch (err) {
+                 return res.status(422).send({ error: "error for fetching profile data" })
+             }
+        }else{
+            try {
+                const data = await Receipt.find({ bank,receipt_date })
+                 if (data) {
+                     console.log(data[0])
+                 }
+                 res.send(data)
+             }
+             catch (err) {
+                 return res.status(422).send({ error: "error for fetching profile data" })
+             }
+        }
+       
     })
 // End Fee Receipt routes
 

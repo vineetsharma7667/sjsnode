@@ -23,6 +23,12 @@ const FeeReceiptSchema = new Schema({
     admission_no:{
         type:String,        
     },
+    class_name:{
+        type:String,        
+    },
+    section:{
+        type:String,        
+    },
     account_no:{
         type:String,        
     },
@@ -48,6 +54,9 @@ const FeeReceiptSchema = new Schema({
         type:String
     },
     paid_amount:{
+        type:String
+    },
+    fine:{
         type:String
     },
     balance:{
