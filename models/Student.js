@@ -73,7 +73,10 @@ const StudentSchema = new Schema({
     }, 
     balance:{
         type:String,        
-    }, 
+    },
+    religion:{
+        type:String,  
+    },
     fee_concession:{
         type:String,        
     }, 
