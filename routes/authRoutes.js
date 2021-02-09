@@ -21,6 +21,7 @@ const Subject = mongoose.model('Subject')
 const House = mongoose.model('House')
 const Parent = mongoose.model('Parent')
 const Student = mongoose.model('Student')
+const Academic = mongoose.model('Academic')
 const Fine = mongoose.model('Fine')
 const FeeStructure = mongoose.model('FeeStructure')
 const Receipt = mongoose.model('Receipt')
@@ -223,9 +224,9 @@ router.post('/StoreWaiver', upload.single('image'), async (req, res) => {
 // Start Session routes
 router.post('/StoreSession', upload.single('image'), async (req, res) => {
     console.log(req.body);
-    const { from,to,session_code} = req.body;
+    const { from,to,session_code,school_id} = req.body;
     try {
-        const Session_data = new Session({from,to,session_code })
+        const Session_data = new Session({from,to,session_code,school_id })
         await Session_data.save();
         if (Session_data) {
             console.log("Session_data")
@@ -241,9 +242,12 @@ router.post('/StoreSession', upload.single('image'), async (req, res) => {
     }
     })
 
-    router.get('/getSession', async (req, res) => {
+   
+    router.post('/getSession', upload.single('image'), async (req, res) => {
+        console.log(req.body);
+        const {school_id} = req.body;
         try {
-            const data = await Session.find()
+            const data = await Session.find({school_id})
             if (data) {
                 console.log(data[0])
             }
@@ -257,14 +261,13 @@ router.post('/StoreSession', upload.single('image'), async (req, res) => {
     })
 // end Session routes
 
-
 // Start Class routes
 router.post('/StoreClass', upload.single('image'),async (req, res) => {
     console.log("yes im in");
     console.log(req.body);
-    const {class_name,actual_class,description} = req.body;
+    const {class_name,actual_class,description,school_id,session} = req.body;
     try {
-        const class_data = new Class({class_name,actual_class,description })
+        const class_data = new Class({class_name,actual_class,description,school_id,session })
         await class_data.save();
         if (class_data) {
             console.log("class_data")
@@ -297,10 +300,22 @@ router.post('/StoreClass', upload.single('image'),async (req, res) => {
             return res.status(422).send({ error: "error for fetching food data" })
         }
     })
+    router.post('/getClass', async (req, res) => {
+        const {school_id} = req.body
+        console.log(req.body)
+        try {
+             await Class.find({school_id}).exec((err,data)=>{
+                res.send(data)
+            })
+        }
+        catch (err) {
+            return res.status(422).send({ error: "error for fetching food data" })
+        }
+    })
     router.put('/updateClass', upload.single('image') ,async (req, res) => {
-        const { _id,class_name,actual_class,description } = req.body;
+        const { _id,school_id,class_name,actual_class,description } = req.body;
         // const image = req.file.path
-        Class.findByIdAndUpdate({_id},{  class_name,actual_class,description }, function(err, result){
+        Class.findByIdAndUpdate({_id},{  school_id,class_name,actual_class,description }, function(err, result){
             if(err){
                 res.send(err)
             }
@@ -321,9 +336,9 @@ router.post('/StoreClass', upload.single('image'),async (req, res) => {
 // Start Section routes
 router.post('/StoreSection', upload.single('image'), async (req, res) => {
     console.log(req.body);
-    const {class_name,section,description} = req.body;
+    const {school_id,class_name,section,description} = req.body;
     try {
-        const section_data = new Section({class_name,section,description })
+        const section_data = new Section({school_id,class_name,section,description })
         await section_data.save();
         if (section_data) {
             console.log("section_data")
@@ -335,13 +350,13 @@ router.post('/StoreSection', upload.single('image'), async (req, res) => {
         res.send(section_data)
     } catch (err) {
         return res.status(422).send(err.message)
-     
     }
     })
 
-    router.get('/getSection', async (req, res) => {
+    router.post('/getSection', async (req, res) => {
+        const {  school_id} = req.body
         try {
-            const data = await Section.find()
+            const data = await Section.find({school_id})
             if (data) {
                 console.log(data[0])
             }
@@ -353,9 +368,9 @@ router.post('/StoreSection', upload.single('image'), async (req, res) => {
         }
     })
     router.put('/updateSection', upload.single('image') ,async (req, res) => {
-        const { _id,class_name,section,description } = req.body;
+        const { _id,school_id,class_name,section,description} = req.body;
         // const image = req.file.path
-        Section.findByIdAndUpdate({_id},{  class_name,section,description }, function(err, result){
+        Section.findByIdAndUpdate({_id},{school_id,class_name,section,description}, function(err, result){
             if(err){
                 res.send(err)
             }
@@ -539,9 +554,9 @@ router.post('/StoreVehicleType', upload.single('image'), async (req, res) => {
 // Start Subject routes
 router.post('/StoreSubject', upload.single('image'), async (req, res) => {
     console.log(req.body);
-    const {class_name,subject,subject_code,board_code,order_no,description} = req.body;
+    const {school_id,class_name,subject,subject_code,board_code,order_no,description} = req.body;
     try {
-        const subject_data = new Subject({class_name,subject,subject_code,board_code,order_no,description})
+        const subject_data = new Subject({school_id,class_name,subject,subject_code,board_code,order_no,description})
         await subject_data.save();
         if (subject_data) {
             console.log("subject_data")
@@ -557,9 +572,11 @@ router.post('/StoreSubject', upload.single('image'), async (req, res) => {
     }
     })
 
-    router.get('/getSubjects', async (req, res) => {
+    
+    router.post('/getSubjects', async (req, res) => {
+            const {  school_id} = req.body
         try {
-            const data = await Subject.find()
+            const data = await Subject.find({school_id})
             if (data) {
                 console.log(data[0])
             }
@@ -569,12 +586,13 @@ router.post('/StoreSubject', upload.single('image'), async (req, res) => {
         catch (err) {
             return res.status(422).send({ error: "error for fetching food data" })
         }
+        
     })
     router.put('/updateSubject', upload.single('image') ,async (req, res) => {
         console.log("Yes I Am In")
-        const { _id,class_name,subject,subject_code,board_code,order_no,description } = req.body;
+        const { _id,school_id,class_name,subject,subject_code,board_code,order_no,description } = req.body;
         // const image = req.file.path
-        Subject.findByIdAndUpdate({_id},{ class_name,subject,subject_code,board_code,order_no,description }, function(err, result){
+        Subject.findByIdAndUpdate({_id},{school_id,class_name,subject,subject_code,board_code,order_no,description }, function(err, result){
             if(err){
                 res.send(err)
             }
@@ -691,12 +709,14 @@ router.post('/StoreStudent', upload.single('image'), async (req, res) => {
     console.log("yes i am in")
     const image = req.file.path
     const balance=0
-    const {session,date_of_admission,parent,admission_no,security_no,old_admission_no,aadhar_no,class_name,section,subjects,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,reg_no,roll_no,board_roll_no,last_school,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details,account_no,father_name,mother_name,father_occu,father_designation,father_annual_income,mother_occu,mother_desgination,mother_annual_income,parent_address,parent_city,parent_state,parent_country,parent_per_address,parent_per_city,parent_per_state,parent_per_country,parent_phone,parent_mobile,gaurdian_name,gaurdian_occu,gaurdian_designation,gaurdian_annual_income,gaurdian_address,gaurdian_city,gaurdian_state,gaurdian_country,gaurdian_per_address,gaurdian_per_city,gaurdian_per_state,gaurdian_per_country,gaurdian_phone,gaurdian_mobile,religion} = req.body;
+    const {school_id,session,date_of_admission,parent,admission_no,security_no,old_admission_no,aadhar_no,class_name,section,subjects,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,reg_no,roll_no,board_roll_no,last_school,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details,account_no,father_name,mother_name,father_occu,father_designation,father_annual_income,mother_occu,mother_desgination,mother_annual_income,parent_address,parent_city,parent_state,parent_country,parent_per_address,parent_per_city,parent_per_state,parent_per_country,parent_phone,parent_mobile,gaurdian_name,gaurdian_occu,gaurdian_designation,gaurdian_annual_income,gaurdian_address,gaurdian_city,gaurdian_state,gaurdian_country,gaurdian_per_address,gaurdian_per_city,gaurdian_per_state,gaurdian_per_country,gaurdian_phone,gaurdian_mobile,religion} = req.body;
     try {
-        const Student_data = new Student({image,session,date_of_admission,balance,parent,admission_no,security_no,old_admission_no,aadhar_no,class_name,section,subjects,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,reg_no,roll_no,board_roll_no,last_school,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details,account_no,father_name,mother_name,father_occu,father_designation,father_annual_income,mother_occu,mother_desgination,mother_annual_income,parent_address,parent_city,parent_state,parent_country, parent_per_address,parent_per_city,parent_per_state,parent_per_country,parent_phone,parent_mobile,gaurdian_name,gaurdian_occu,gaurdian_designation,gaurdian_annual_income,gaurdian_address,gaurdian_city,gaurdian_state,gaurdian_country,gaurdian_per_address,gaurdian_per_city,gaurdian_per_state,gaurdian_per_country,gaurdian_phone,gaurdian_mobile,religion})
+        const Student_data = new Student({image,school_id,session,date_of_admission,balance,parent,admission_no,security_no,old_admission_no,aadhar_no,class_name,section,subjects,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,reg_no,roll_no,board_roll_no,last_school,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details,account_no,father_name,mother_name,father_occu,father_designation,father_annual_income,mother_occu,mother_desgination,mother_annual_income,parent_address,parent_city,parent_state,parent_country, parent_per_address,parent_per_city,parent_per_state,parent_per_country,parent_phone,parent_mobile,gaurdian_name,gaurdian_occu,gaurdian_designation,gaurdian_annual_income,gaurdian_address,gaurdian_city,gaurdian_state,gaurdian_country,gaurdian_per_address,gaurdian_per_city,gaurdian_per_state,gaurdian_per_country,gaurdian_phone,gaurdian_mobile,religion})
         await Student_data.save();
         if (Student_data) {
-            console.log("Student_data")
+           await console.log("Student_data")
+            const Academic_data = new Academic({student:Student_data._id,school_id,session,class_name,section,admission_no,account_no})
+            Academic_data.save();
         }
         else {
             console.log("data is not stored")
@@ -709,56 +729,88 @@ router.post('/StoreStudent', upload.single('image'), async (req, res) => {
     }
     })
 
-    router.get('/getStudent', async (req, res) => {
+        router.post('/getStudent', async (req, res) => {
+        const { session,school_id} = req.body
+        console.log(req.body)
         try {
-            const data = await Student.find().sort({ _id: -1 })
-            if (data) {
-                console.log(data[0])
-            }
-            console.log(data[0]+"finding data of single parent")
-            res.send(data)
+             await Academic.find({session,school_id}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+                console.log("gfgfdgfdgfdgsadsadadsa",data)
+                res.send(data)
+            })
+            // if (data) {
+            //     console.log(data[0])
+            // }
+            // console.log(data[0]+"finding data of single parent")
+            // res.send(data)
         }
         catch (err) {
             return res.status(422).send({ error: "error for fetching food data" })
         }
     })
-
-    router.post('/singleparentdata', async (req, res) => {
-        console.log(req.body.account_no+'yes im in')
-        const { account_no } = req.body;
+    router.post('/getStudentForUpgrade', async (req, res) => {
+        const { session, class_name} = req.body
+        console.log(req.body)
         try {
-           const data = await Student.find({ account_no })
-            if (data) {
-                console.log(data)
-            }
-            
-            res.send(data)
+             await Academic.find({session,class_name}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+                console.log("gfgfdgfdgfdgsadsadadsa",data)
+                res.send(data)
+            })
         }
         catch (err) {
-            return res.status(422).send({ error: "error for fetching profile data" })
+            return res.status(422).send({ error: "error for fetching food data" })
         }
     })
     router.post('/singlestudentdata', async (req, res) => {
-        console.log('yes im in')
-        const { admission_no } = req.body;
+        const { session,admission_no,school_id} = req.body
+        console.log(req.body)
         try {
-           const data = await Student.find({ admission_no })
-            if (data) {
-                console.log(data[0])
-            }
-            
-            res.send(data)
+             await Academic.find({session,admission_no,school_id}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+                console.log("gfgfdgfdgfdgsadsadadsa",data)
+                res.send(data)
+            })
         }
         catch (err) {
-            return res.status(422).send({ error: "error for fetching profile data" })
+            return res.status(422).send({ error: "error for fetching food data" })
         }
     })
+    // router.post('/singlestudentdata', async (req, res) => {
+    //     console.log('yes im in')
+    //     const { admission_no } = req.body;
+    //     try {
+    //        const data = await Student.find({ admission_no })
+    //         if (data) {
+    //             console.log(data[0])
+    //         }
+            
+    //         res.send(data)
+    //     }
+    //     catch (err) {
+    //         return res.status(422).send({ error: "error for fetching profile data" })
+    //     }
+    // })
 
+    router.post('/singlestudentdata', upload.single('image'),async (req, res) => {
+        console.log("yes im in");
+        console.log(req.body);
+        const { admission_no } = req.body;
+        console.log("yes im in"+StudentData);
+        try {
+          const  studen_upgrade_data=   Academic.insertMany(JSON.parse(StudentData)).then(function(){ 
+            console.log("Data inserted")  // Success 
+            res.send(studen_upgrade_data)
+            res()
+            }).catch(function(error){ 
+            console.log(error)      // Failure 
+        }); 
+        } catch (err) {
+            console.log(err.message.toString().includes('duplicate'))  
+        }
+        })
     router.put('/updateStudent', upload.single('image') ,async (req, res) => {
         console.log("Yes I Am In")
-        const { _id,session,date_of_admission,parent,admission_no,security_no,old_admission_no,aadhar_no,class_name,section,subjects,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,reg_no,roll_no,board_roll_no,last_school,balance,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details,account_no,father_name,mother_name,father_occu,father_designation,father_annual_income,mother_occu,mother_desgination,mother_annual_income,parent_address,parent_city,parent_state,parent_country,parent_phone,parent_mobile,gaurdian_name,gaurdian_occu,gaurdian_designation,gaurdian_annual_income,gaurdian_address,gaurdian_city,gaurdian_state,gaurdian_country,gaurdian_phone,gaurdian_mobile,religion } = req.body;
+        const { _id,school_id,session,date_of_admission,parent,admission_no,security_no,old_admission_no,aadhar_no,class_name,section,subjects,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,reg_no,roll_no,board_roll_no,last_school,balance,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details,account_no,father_name,mother_name,father_occu,father_designation,father_annual_income,mother_occu,mother_desgination,mother_annual_income,parent_address,parent_city,parent_state,parent_country,parent_phone,parent_mobile,gaurdian_name,gaurdian_occu,gaurdian_designation,gaurdian_annual_income,gaurdian_address,gaurdian_city,gaurdian_state,gaurdian_country,gaurdian_phone,gaurdian_mobile,religion } = req.body;
         const image = req.file.path
-        Student.findByIdAndUpdate({_id},{ session,date_of_admission,parent,admission_no,security_no,old_admission_no,aadhar_no,class_name,section,subjects,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,reg_no,roll_no,board_roll_no,last_school,balance,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details,account_no,father_name,mother_name,father_occu,father_designation,father_annual_income,mother_occu,mother_desgination,mother_annual_income,parent_address,parent_city,parent_state,parent_country,parent_phone,parent_mobile,gaurdian_name,gaurdian_occu,gaurdian_designation,gaurdian_annual_income,gaurdian_address,gaurdian_city,gaurdian_state,gaurdian_country,gaurdian_phone,gaurdian_mobile,religion,image }, function(err, result){
+        Student.findByIdAndUpdate({_id},{school_id,session,date_of_admission,parent,admission_no,security_no,old_admission_no,aadhar_no,class_name,section,subjects,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,reg_no,roll_no,board_roll_no,last_school,balance,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details,account_no,father_name,mother_name,father_occu,father_designation,father_annual_income,mother_occu,mother_desgination,mother_annual_income,parent_address,parent_city,parent_state,parent_country,parent_phone,parent_mobile,gaurdian_name,gaurdian_occu,gaurdian_designation,gaurdian_annual_income,gaurdian_address,gaurdian_city,gaurdian_state,gaurdian_country,gaurdian_phone,gaurdian_mobile,religion,image }, function(err, result){
             if(err){
                 res.send(err)
             }
@@ -773,13 +825,32 @@ router.post('/StoreStudent', upload.single('image'), async (req, res) => {
         FeeStructure.findByIdAndRemove(_id).exec();
         res.send({ res: "Deleted Sucessfully" })
     })
+
+
+    router.post('/StoreUpgradeStudent', upload.single('image'),async (req, res) => {
+        console.log("yes im in");
+        console.log(req.body);
+        const {StudentData} = req.body;
+        console.log("yes im in"+StudentData);
+        try {
+          const  studen_upgrade_data=   Academic.insertMany(JSON.parse(StudentData)).then(function(){ 
+            console.log("Data inserted")  // Success 
+            res.send(studen_upgrade_data)
+            res()
+            }).catch(function(error){ 
+            console.log(error)      // Failure 
+        }); 
+        } catch (err) {
+            console.log(err.message.toString().includes('duplicate'))  
+        }
+        })
 // end Student routes
 // Start Fee Structure routes
     router.post('/StoreFeeStructure', upload.single('image'), async (req, res) => {
     console.log(req.body);
-    const {session,class_name,section,total_one_time_fee,fees,total_monthly_fee,total_annual_fee,grand_total} = req.body;
+    const {session,school_id,class_name,section,total_one_time_fee,fees,total_monthly_fee,total_annual_fee,grand_total} = req.body;
     try {
-        const Fee_structure_data = new FeeStructure({session,class_name,section,total_one_time_fee,fees,total_monthly_fee,total_annual_fee,grand_total})
+        const Fee_structure_data = new FeeStructure({session,school_id,class_name,section,total_one_time_fee,fees,total_monthly_fee,total_annual_fee,grand_total})
         await Fee_structure_data.save();
         if (Fee_structure_data) {
             console.log("Fee_structure_data")
@@ -795,9 +866,11 @@ router.post('/StoreStudent', upload.single('image'), async (req, res) => {
     }
     })
 
-    router.get('/getFeeStructure', async (req, res) => {
+        router.post('/getFeeStructure', upload.single('image'), async (req, res) => {
+            console.log(req.body);
+            const {school_id,session} = req.body;
         try {
-            const data = await FeeStructure.find()
+            const data = await FeeStructure.find({school_id,session})
             if (data) {
                 console.log(data[0])
             }
@@ -828,9 +901,9 @@ router.post('/StoreStudent', upload.single('image'), async (req, res) => {
 
     router.post('/FeesClasswise', async (req, res) => {
         console.log('yes im in' + req.body.section)
-        const { class_name,section } = req.body;
+        const { class_name,session } = req.body;
         try {
-           const data = await FeeStructure.find({ class_name })
+           const data = await FeeStructure.find({ class_name,session })
             if (data) {
                 console.log(data[0])
             }
@@ -842,9 +915,9 @@ router.post('/StoreStudent', upload.single('image'), async (req, res) => {
     })
      router.put('/updateFeeStructure', upload.single('image') ,async (req, res) => {
         console.log("Yes I Am In")
-        const { _id,session,class_name,section,total_one_time_fee,fees,total_monthly_fee,total_annual_fee,grand_total } = req.body;
+        const { _id,session,school_id,class_name,section,total_one_time_fee,fees,total_monthly_fee,total_annual_fee,grand_total } = req.body;
         // const image = req.file.path
-        FeeStructure.findByIdAndUpdate({_id},{ session,class_name,section,total_one_time_fee,fees,total_monthly_fee,total_annual_fee,grand_total }, function(err, result){
+        FeeStructure.findByIdAndUpdate({_id},{ session,school_id,class_name,section,total_one_time_fee,fees,total_monthly_fee,total_annual_fee,grand_total }, function(err, result){
             if(err){
                 res.send(err)
             }

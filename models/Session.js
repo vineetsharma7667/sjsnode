@@ -4,9 +4,11 @@ const Schema = mongoose.Schema;
 const SessionSchema = new Schema({
     session_code:{
         type:String, 
-        unique:true,       
         required:true
     }, 
+    school_id:{
+        type:String, 
+    },
     from:{
         type:String,     
         required:true

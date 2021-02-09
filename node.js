@@ -19,6 +19,7 @@ require('./models/Subject');
 require('./models/House');
 require('./models/Parent');
 require('./models/Student');
+require('./models/Academic');
 require('./models/FeeStructure');
 require('./models/Receipt');
 require('./models/Fine');

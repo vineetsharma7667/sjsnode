@@ -2,6 +2,9 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 // const bcrypt = require('bcrypt')
 const StudentSchema = new Schema({
+    school_id:{
+        type:String,        
+    },
     session:{
         type:String,        
     }, 
@@ -43,7 +46,7 @@ const StudentSchema = new Schema({
     }, 
     category:{
         type:String,        
-    }, 
+    },
     house:{
         type:String,        
     }, 
@@ -240,7 +243,9 @@ const StudentSchema = new Schema({
     image:{
         type:String,        
     }, 
-
+    // academics:[{ type: Schema.Types.ObjectId,
+    //     ref:"Academic" 
+    // }],
 
 },{timestamps: true}
 )

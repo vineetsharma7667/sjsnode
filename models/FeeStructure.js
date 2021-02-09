@@ -6,6 +6,9 @@ const FeeStructureSchema = new Schema({
         type:String,        
         required:true
     }, 
+    school_id:{
+        type:String,        
+    }, 
     class_name:{
         type:String,        
     },

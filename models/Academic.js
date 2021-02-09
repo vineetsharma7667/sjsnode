@@ -1,34 +1,30 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 // const bcrypt = require('bcrypt')
-const SubjectSchema = new Schema({
+const AcademicSchema = new Schema({
+ 
     school_id:{
+        type:String,        
+    },
+    session:{
         type:String,        
     }, 
     class_name:{
         type:String,        
-        required:true
-    },
-    subject:{
-        type:String,           
-        required:true
     }, 
-    subject_code:{
-        type:String,        
-        required:true
-    },   
-    board_code:{
-        type:String,               
-    }, 
-    order_no:{
-        type:String,        
-    },
-    description:{
+    section:{
         type:String,        
     }, 
-
+    admission_no:{
+        type:String,        
+    }, 
+    account_no:{
+        type:String,        
+    }, 
+    student:{ type:Schema.Types.ObjectId,
+        ref:"Student"
+     },
 
 },{timestamps: true}
 )
-
-mongoose.model('Subject',SubjectSchema);
+mongoose.model('Academic',AcademicSchema);
