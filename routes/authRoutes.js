@@ -25,6 +25,7 @@ const Academic = mongoose.model('Academic')
 const Fine = mongoose.model('Fine')
 const FeeStructure = mongoose.model('FeeStructure')
 const Receipt = mongoose.model('Receipt')
+const Bank = mongoose.model('Bank')
 
 
 const cors = require('cors');
@@ -35,15 +36,29 @@ multer({
 router.use(cors({ origin: true }));
 //code for images
 var multer = require('multer')
+
 var storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, './public/uploads/')
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + file.originalname)
-    }
-})
-var upload = multer({ storage: storage })
+
+
+    destination: function(req, file, callback) {
+        callback(null, './public/uploads');
+      },
+      filename: function(req, file, callback) {
+        callback(null, Date.now() + file.originalname)
+      }
+    });
+    
+    const upload = multer({ storage: storage });
+
+// var storage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//         cb(null, './public/uploads/')
+//     },
+//     filename: function (req, file, cb) {
+//         cb(null, Date.now() + file.originalname)
+//     }
+// })
+// var upload = multer({ storage: storage })
 //end code for images
 
 
@@ -550,6 +565,61 @@ router.post('/StoreVehicleType', upload.single('image'), async (req, res) => {
     })
 // end Vehicle Type routes
 
+// Bank routes
+router.post('/StoreBankData', upload.single('image'), async (req, res) => {
+    console.log(req.body);
+    const {bank,school_id} = req.body;
+    try {
+        const Bank_data = new Bank({bank,school_id})
+        await Bank_data.save();
+        if (Bank_data) {
+            console.log("Bank_data")
+        }
+        else {
+            console.log("data is not stored")
+        }
+        console.log(Bank_data);
+        res.send(Bank_data)
+    } catch (err) {
+        return res.status(422).send(err.message)
+     
+    }
+})
+router.post('/getBankData', async (req, res) => {
+    const { school_id} = req.body
+try {
+    const data = await Bank.find({school_id})
+    if (data) {
+        console.log(data[0])
+    }
+    console.log(data[0])
+    res.send(data)
+}
+catch (err) {
+    return res.status(422).send({ error: "error for fetching food data" })
+}
+
+})
+router.put('/UpdateBankData', upload.single('image') ,async (req, res) => {
+    console.log("Yes I Am In")
+    const { _id,bank,school_id} = req.body;
+    // const image = req.file.path
+    Bank.findByIdAndUpdate({_id},{bank,school_id}, function(err, result){
+        if(err){
+            res.send(err)
+        }
+        else{
+            res.send(result)
+        }
+    })
+})
+router.delete('/deleteBank', (req, res) => {
+    const { _id } = req.body
+    console.log(_id)
+    Bank.findByIdAndRemove(_id).exec();
+    res.send({ res: "Deleted Sucessfully" })
+})
+// end Bank routes
 
 // Start Subject routes
 router.post('/StoreSubject', upload.single('image'), async (req, res) => {
@@ -705,13 +775,47 @@ router.post('/StoreParent', upload.single('image'), async (req, res) => {
 
 
 // Start Student routes
-router.post('/StoreStudent', upload.single('image'), async (req, res) => {
+router.post('/StoreStudent', upload.fields([{
+    name: 'image',maxCount: 1
+  }, {
+    name: 'image2',maxCount: 1
+  },{
+    name: 'image3',maxCount: 1
+  },{
+    name: 'image4',maxCount: 1
+  }]), async (req, res) => {
     console.log("yes i am in")
-    const image = req.file.path
+   
     const balance=0
     const {school_id,session,date_of_admission,parent,admission_no,security_no,old_admission_no,aadhar_no,class_name,section,subjects,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,reg_no,roll_no,board_roll_no,last_school,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details,account_no,father_name,mother_name,father_occu,father_designation,father_annual_income,mother_occu,mother_desgination,mother_annual_income,parent_address,parent_city,parent_state,parent_country,parent_per_address,parent_per_city,parent_per_state,parent_per_country,parent_phone,parent_mobile,gaurdian_name,gaurdian_occu,gaurdian_designation,gaurdian_annual_income,gaurdian_address,gaurdian_city,gaurdian_state,gaurdian_country,gaurdian_per_address,gaurdian_per_city,gaurdian_per_state,gaurdian_per_country,gaurdian_phone,gaurdian_mobile,religion} = req.body;
+
+    var image,image2,image3,image4
+    if(req.files.image != undefined){
+    image = req.files.image[0].path;
+    }
+    else{
+    image = req.body.image
+    }
+    if(req.files.image2 != undefined){
+    image2= req.files.image2[0].path;
+    }
+    else{
+        image2 = req.body.image2
+    }
+    if(req.files.image3 != undefined){
+    image3= req.files.image3[0].path;
+    }
+    else{
+    image3 = req.body.image3
+    }
+    if(req.files.image4 != undefined){
+    image4= req.files.image4[0].path;
+    }
+    else{
+    image4 = req.body.image4 
+    }
     try {
-        const Student_data = new Student({image,school_id,session,date_of_admission,balance,parent,admission_no,security_no,old_admission_no,aadhar_no,class_name,section,subjects,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,reg_no,roll_no,board_roll_no,last_school,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details,account_no,father_name,mother_name,father_occu,father_designation,father_annual_income,mother_occu,mother_desgination,mother_annual_income,parent_address,parent_city,parent_state,parent_country, parent_per_address,parent_per_city,parent_per_state,parent_per_country,parent_phone,parent_mobile,gaurdian_name,gaurdian_occu,gaurdian_designation,gaurdian_annual_income,gaurdian_address,gaurdian_city,gaurdian_state,gaurdian_country,gaurdian_per_address,gaurdian_per_city,gaurdian_per_state,gaurdian_per_country,gaurdian_phone,gaurdian_mobile,religion})
+        const Student_data = new Student({image,image2,image3,image4,school_id,session,date_of_admission,balance,parent,admission_no,security_no,old_admission_no,aadhar_no,class_name,section,subjects,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,reg_no,roll_no,board_roll_no,last_school,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details,account_no,father_name,mother_name,father_occu,father_designation,father_annual_income,mother_occu,mother_desgination,mother_annual_income,parent_address,parent_city,parent_state,parent_country, parent_per_address,parent_per_city,parent_per_state,parent_per_country,parent_phone,parent_mobile,gaurdian_name,gaurdian_occu,gaurdian_designation,gaurdian_annual_income,gaurdian_address,gaurdian_city,gaurdian_state,gaurdian_country,gaurdian_per_address,gaurdian_per_city,gaurdian_per_state,gaurdian_per_country,gaurdian_phone,gaurdian_mobile,religion})
         await Student_data.save();
         if (Student_data) {
            await console.log("Student_data")
@@ -752,6 +856,19 @@ router.post('/StoreStudent', upload.single('image'), async (req, res) => {
         console.log(req.body)
         try {
              await Academic.find({session,class_name}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+                console.log("gfgfdgfdgfdgsadsadadsa",data)
+                res.send(data)
+            })
+        }
+        catch (err) {
+            return res.status(422).send({ error: "error for fetching food data" })
+        }
+    })
+    router.post('/getStudentForUpgradeSingle', async (req, res) => {
+        const { session, class_name,section} = req.body
+        console.log(req.body)
+        try {
+             await Academic.find({session,class_name,section}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
                 console.log("gfgfdgfdgfdgsadsadadsa",data)
                 res.send(data)
             })
@@ -806,16 +923,56 @@ router.post('/StoreStudent', upload.single('image'), async (req, res) => {
             console.log(err.message.toString().includes('duplicate'))  
         }
         })
-    router.put('/updateStudent', upload.single('image') ,async (req, res) => {
-        console.log("Yes I Am In")
-        const { _id,school_id,session,date_of_admission,parent,admission_no,security_no,old_admission_no,aadhar_no,class_name,section,subjects,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,reg_no,roll_no,board_roll_no,last_school,balance,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details,account_no,father_name,mother_name,father_occu,father_designation,father_annual_income,mother_occu,mother_desgination,mother_annual_income,parent_address,parent_city,parent_state,parent_country,parent_phone,parent_mobile,gaurdian_name,gaurdian_occu,gaurdian_designation,gaurdian_annual_income,gaurdian_address,gaurdian_city,gaurdian_state,gaurdian_country,gaurdian_phone,gaurdian_mobile,religion } = req.body;
-        const image = req.file.path
-        Student.findByIdAndUpdate({_id},{school_id,session,date_of_admission,parent,admission_no,security_no,old_admission_no,aadhar_no,class_name,section,subjects,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,reg_no,roll_no,board_roll_no,last_school,balance,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details,account_no,father_name,mother_name,father_occu,father_designation,father_annual_income,mother_occu,mother_desgination,mother_annual_income,parent_address,parent_city,parent_state,parent_country,parent_phone,parent_mobile,gaurdian_name,gaurdian_occu,gaurdian_designation,gaurdian_annual_income,gaurdian_address,gaurdian_city,gaurdian_state,gaurdian_country,gaurdian_phone,gaurdian_mobile,religion,image }, function(err, result){
-            if(err){
+    router.put('/updateStudent', upload.fields([{
+        name: 'image',maxCount: 1
+      }, {
+        name: 'image2',maxCount: 1
+      },{
+        name: 'image3',maxCount: 1
+      },{
+        name: 'image4',maxCount: 1
+      }]) ,async (req, res) => {
+        const {old_id,_id,school_id,session,oldsession,date_of_admission,parent,admission_no,security_no,old_admission_no,aadhar_no,class_name,oldclass_name,section,oldsection,subjects,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,reg_no,roll_no,board_roll_no,last_school,balance,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details,account_no,father_name,mother_name,father_occu,father_designation,father_annual_income,mother_occu,mother_desgination,mother_annual_income,parent_address,parent_city,parent_state,parent_country,parent_phone,parent_mobile,gaurdian_name,gaurdian_occu,gaurdian_designation,gaurdian_annual_income,gaurdian_address,gaurdian_city,gaurdian_state,gaurdian_country,gaurdian_phone,gaurdian_mobile,religion } = req.body;
+        console.log("Yes I Am In"+oldsession)
+        var image,image2,image3,image4
+        if(req.files.image != undefined){
+        image = req.files.image[0].path;
+        }
+        else{
+        image = req.body.image
+        }
+        if(req.files.image2 != undefined){
+        image2= req.files.image2[0].path;
+        }
+        else{
+            image2 = req.body.image2
+        }
+        if(req.files.image3 != undefined){
+        image3= req.files.image3[0].path;
+        }
+        else{
+        image3 = req.body.image3
+        }
+        if(req.files.image4 != undefined){
+        image4= req.files.image4[0].path;
+        }
+        else{
+        image4 = req.body.image4 
+        }
+        Student.findByIdAndUpdate({_id:old_id},{image,image2,image3,image4,school_id,session:oldsession,date_of_admission,parent,admission_no,security_no,old_admission_no,aadhar_no,class_name:oldclass_name,section:oldsection,subjects,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,reg_no,roll_no,board_roll_no,last_school,balance,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details,account_no,father_name,mother_name,father_occu,father_designation,father_annual_income,mother_occu,mother_desgination,mother_annual_income,parent_address,parent_city,parent_state,parent_country,parent_phone,parent_mobile,gaurdian_name,gaurdian_occu,gaurdian_designation,gaurdian_annual_income,gaurdian_address,gaurdian_city,gaurdian_state,gaurdian_country,gaurdian_phone,gaurdian_mobile,religion }, function(err, result){
+            if(err){                
                 res.send(err)
             }
             else{
-                res.send(result)
+                Academic.findByIdAndUpdate({_id},{school_id,session,class_name,section,admission_no,account_no }, function(err, result){
+                    if(err){
+                        res.send(err)
+                    }
+                    else{
+                        res.send(result)
+                    }
+                })
+                // res.send(result)
             }
         })
     })
@@ -836,13 +993,31 @@ router.post('/StoreStudent', upload.single('image'), async (req, res) => {
           const  studen_upgrade_data=   Academic.insertMany(JSON.parse(StudentData)).then(function(){ 
             console.log("Data inserted")  // Success 
             res.send(studen_upgrade_data)
-            res()
             }).catch(function(error){ 
             console.log(error)      // Failure 
         }); 
         } catch (err) {
             console.log(err.message.toString().includes('duplicate'))  
         }
+        })
+        router.post('/DeleteUpgradeStudent', upload.single('image'),async (req, res) => {
+            const {IdArray} = req.body;
+                Academic.deleteMany(
+                            {
+                            _id: {
+                                $in: JSON.parse(IdArray)
+                            }
+                            },
+                            function(err, result) {
+                            if (err) {
+                                res.send(err);
+                                console.log("delete error "+err)
+                            } else {
+                                console.log("delete")
+                                res.send(result);
+                            }
+                            }
+                        );
         })
 // end Student routes
 // Start Fee Structure routes
@@ -865,6 +1040,8 @@ router.post('/StoreStudent', upload.single('image'), async (req, res) => {
      
     }
     })
+
+    
 
         router.post('/getFeeStructure', upload.single('image'), async (req, res) => {
             console.log(req.body);

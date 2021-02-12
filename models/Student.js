@@ -243,6 +243,15 @@ const StudentSchema = new Schema({
     image:{
         type:String,        
     }, 
+    image2:{
+        type:String,        
+    }, 
+    image3:{
+        type:String,        
+    }, 
+    image4:{
+        type:String,        
+    }, 
     // academics:[{ type: Schema.Types.ObjectId,
     //     ref:"Academic" 
     // }],

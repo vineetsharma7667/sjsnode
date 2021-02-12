@@ -23,6 +23,7 @@ require('./models/Academic');
 require('./models/FeeStructure');
 require('./models/Receipt');
 require('./models/Fine');
+require('./models/Bank');
 
 const requireToken= require('./middleware/requireToken');
 app.use(bodyParser.json());
