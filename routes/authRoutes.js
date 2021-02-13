@@ -890,6 +890,7 @@ router.post('/StoreStudent', upload.fields([{
             return res.status(422).send({ error: "error for fetching food data" })
         }
     })
+
     // router.post('/singlestudentdata', async (req, res) => {
     //     console.log('yes im in')
     //     const { admission_no } = req.body;
@@ -1208,6 +1209,25 @@ router.post('/StoreStudent', upload.fields([{
              }
         }
        
+    })
+
+    router.post('/printvoucherbydate', async (req, res) => {
+        console.log('yes im in' + req.body.Bank)
+        const {VoucherDate } = req.body;
+        const receipt_date = VoucherDate
+       
+       
+            try {
+                const data = await Receipt.find({receipt_date})
+                 if (data) {
+                     console.log(data[0])
+                 }
+                 res.send(data)
+             }
+             catch (err) {
+                 return res.status(422).send({ error: "error for fetching profile data" })
+             }
+        
     })
 
     router.post('/VoucherInDetail', async (req, res) => {
