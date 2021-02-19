@@ -785,7 +785,6 @@ router.post('/StoreStudent', upload.fields([{
     name: 'image4',maxCount: 1
   }]), async (req, res) => {
     console.log("yes i am in")
-   
     const balance=0
     const {school_id,session,date_of_admission,parent,admission_no,security_no,old_admission_no,aadhar_no,class_name,section,subjects,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,reg_no,roll_no,board_roll_no,last_school,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details,account_no,father_name,mother_name,father_occu,father_designation,father_annual_income,mother_occu,mother_desgination,mother_annual_income,parent_address,parent_city,parent_state,parent_country,parent_per_address,parent_per_city,parent_per_state,parent_per_country,parent_phone,parent_mobile,gaurdian_name,gaurdian_occu,gaurdian_designation,gaurdian_annual_income,gaurdian_address,gaurdian_city,gaurdian_state,gaurdian_country,gaurdian_per_address,gaurdian_per_city,gaurdian_per_state,gaurdian_per_country,gaurdian_phone,gaurdian_mobile,religion} = req.body;
 
@@ -837,15 +836,10 @@ router.post('/StoreStudent', upload.fields([{
         const { session,school_id} = req.body
         console.log(req.body)
         try {
-             await Academic.find({session,school_id}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+                await Academic.find({session,school_id}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
                 console.log("gfgfdgfdgfdgsadsadadsa",data)
                 res.send(data)
             })
-            // if (data) {
-            //     console.log(data[0])
-            // }
-            // console.log(data[0]+"finding data of single parent")
-            // res.send(data)
         }
         catch (err) {
             return res.status(422).send({ error: "error for fetching food data" })
@@ -1001,6 +995,7 @@ router.post('/StoreStudent', upload.fields([{
             console.log(err.message.toString().includes('duplicate'))  
         }
         })
+      
         router.post('/DeleteUpgradeStudent', upload.single('image'),async (req, res) => {
             const {IdArray} = req.body;
                 Academic.deleteMany(
@@ -1041,8 +1036,22 @@ router.post('/StoreStudent', upload.fields([{
      
     }
     })
-
-    
+    router.post('/storeImportStructure', upload.single('image'),async (req, res) => {
+        console.log("yes im in");
+        console.log(req.body);
+        const {AllImportFeeStructure} = req.body;
+        console.log("yes im in"+AllImportFeeStructure);
+        try {
+          const  studen_upgrade_data=   FeeStructure.insertMany(JSON.parse(AllImportFeeStructure)).then(function(){ 
+            console.log("Data inserted")  // Success 
+            res.send(studen_upgrade_data)
+            }).catch(function(error){ 
+            console.log(error)      // Failure 
+        }); 
+        } catch (err) {
+            console.log(err.message.toString().includes('duplicate'))  
+        }
+        })
 
         router.post('/getFeeStructure', upload.single('image'), async (req, res) => {
             console.log(req.body);
@@ -1115,9 +1124,9 @@ router.post('/StoreStudent', upload.fields([{
 // Start Fee Receipt routes
     router.post('/StoreReceipt', upload.single('image'), async (req, res) => {
     console.log(req.body);
-    const {receipt_date,receipt_no,ref_receipt_no,last_fee_date,session,admission_no,class_name,section,prospectus_fee,registration_fee,admission_fee,security_fee,account_no,paid_fees,paid_month,paid_months,fine,paid_amount,balance,total_one_time_fee,total_monthly_fee,total_annual_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date} = req.body;
+    const {receipt_date,name,receipt_no,ref_receipt_no,last_fee_date,session,admission_no,class_name,section,prospectus_fee,registration_fee,admission_fee,security_fee,account_no,paid_fees,Allfees,paid_month,paid_months,fine,paid_amount,balance,total_one_time_fee,total_monthly_fee,total_annual_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date} = req.body;
     try {
-        const Fee_structure_data = new Receipt({receipt_date,receipt_no,last_fee_date,ref_receipt_no,session,admission_no,class_name,section,prospectus_fee,registration_fee,admission_fee,security_fee,account_no,paid_fees,paid_month,paid_months,fine,paid_amount,balance,total_one_time_fee,total_monthly_fee,total_annual_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date})
+        const Fee_structure_data = new Receipt({receipt_date,name,receipt_no,last_fee_date,ref_receipt_no,session,admission_no,class_name,section,prospectus_fee,registration_fee,admission_fee,security_fee,account_no,paid_fees,Allfees,paid_month,paid_months,fine,paid_amount,balance,total_one_time_fee,total_monthly_fee,total_annual_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date})
         await Fee_structure_data.save();
         if (Fee_structure_data) {
             console.log("Fee_structure_data")
@@ -1161,6 +1170,23 @@ router.post('/StoreStudent', upload.fields([{
             return res.status(422).send({ error: "error for fetching food data" })
         }
     })
+    // router.post('/getSummary', upload.single('image'), async (req, res) => {
+    //     console.log(req.body);
+    //     const {summaryFrom,summaryTo} = req.body;
+    //     try {
+    //         const data = await Receipt.find({"receipt_date":{ $gte:summaryFrom, $lt:summaryTo }
+    //     })
+    //         if (data) {
+    //             console.log(data[0])
+    //         }
+    //         console.log(data[0])
+    //         res.send(data)
+    //     }
+    //     catch (err) {
+    //         return res.status(422).send({ error: "error for fetching food data" });
+    //         console.log(err)
+    //     }
+    // })
     router.patch('/UpdateBalance',upload.single('image'),async (req, res) => {    
         const { _id,balance } = req.body;
         console.log(req.body)
@@ -1213,10 +1239,12 @@ router.post('/StoreStudent', upload.fields([{
 
     router.post('/printvoucherbydate', async (req, res) => {
         console.log('yes im in' + req.body.Bank)
-        const {VoucherDate } = req.body;
+        const {VoucherDate,Bank } = req.body;
         const receipt_date = VoucherDate
+        const bank = Bank
        
        
+        if(Bank ==""){
             try {
                 const data = await Receipt.find({receipt_date})
                  if (data) {
@@ -1227,6 +1255,18 @@ router.post('/StoreStudent', upload.fields([{
              catch (err) {
                  return res.status(422).send({ error: "error for fetching profile data" })
              }
+        }else{
+            try {
+                const data = await Receipt.find({ bank,receipt_date })
+                 if (data) {
+                     console.log(data[0])
+                 }
+                 res.send(data)
+             }
+             catch (err) {
+                 return res.status(422).send({ error: "error for fetching profile data" })
+             }
+        }
         
     })
 
