@@ -2,7 +2,10 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 // const bcrypt = require('bcrypt')
 const AcademicSchema = new Schema({
- 
+    unique_id:{
+        unique:true,
+        type:String,          
+    },
     school_id:{
         type:String,        
     },
