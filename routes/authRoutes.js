@@ -977,8 +977,6 @@ router.post('/StoreStudent', upload.fields([{
         FeeStructure.findByIdAndRemove(_id).exec();
         res.send({ res: "Deleted Sucessfully" })
     })
-
-
     router.post('/StoreUpgradeStudent', upload.single('image'),async (req, res) => {
         console.log("yes im in");
         console.log(req.body);
@@ -995,7 +993,34 @@ router.post('/StoreStudent', upload.fields([{
             console.log(err.message.toString().includes('duplicate'))  
         }
         })
-      
+        router.post('/ImportStudent',upload.single('image'),async (req, res) => {
+            console.log("yes im in");
+            // console.log(req.body);
+            const {StudentData} = req.body;
+            console.log("yes im in"+ StudentData);
+
+            
+            try {
+              const  Student_data=   Student.insertMany(JSON.parse(StudentData)).then(result=>{ 
+                console.log("Data inserted")  // Success 
+                if (Student_data) {
+                    for (var i = 0; i <result.length; i++) {
+                     const Academic_data = new Academic({student:result[i]._id,school_id:result[i].school_id,unique_id:result[i].unique_id,session:result[i].session,class_name:result[i].class_name,section:result[i].section,admission_no:result[i].admission_no,account_no:result[i].account_no})
+                     Academic_data.save();
+                    }
+                 }
+                 else {
+                     console.log("data is not stored")
+                 }
+                res.send(Student_data)
+                }).catch(function(error){ 
+                console.log(error)      // Failure 
+            }); 
+            } catch (err) {
+                console.log(err.message.toString().includes('duplicate'))  
+            }
+        })
+
         router.post('/DeleteUpgradeStudent', upload.single('image'),async (req, res) => {
             const {IdArray} = req.body;
                 Academic.deleteMany(

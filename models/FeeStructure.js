@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 const FeeStructureSchema = new Schema({
     unique_id:{
         unique:true,
-        type:String,       
+        type:String,    
+        required:true     
     }, 
     session:{
         type:String,        
@@ -34,9 +35,6 @@ const FeeStructureSchema = new Schema({
     grand_total:{
         type:String,        
     },
-
- 
-
 },{timestamps: true}
 )
 
