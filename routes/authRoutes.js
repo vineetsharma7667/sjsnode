@@ -1182,14 +1182,23 @@ router.post('/StoreStudent', upload.fields([{
     })
     router.post('/DefaulterByMonth', async (req, res) => {
         console.log('yes im in' + req.body.session)
-        const { session,DefaulterByMonth } = req.body;
+        const { session,DefaulterByMonth,class_name } = req.body;
         const defaulter_month =DefaulterByMonth
         try {
-           const data = await Receipt.find({ session,defaulter_month })
-            if (data) {
-                console.log(data[0])
+            if(class_name ==''){
+                const data = await Receipt.find({ session,defaulter_month })
+                if (data) {
+                    console.log(data[0])
+                }
+                res.send(data)
+            } else{
+                const data = await Receipt.find({ session,defaulter_month,class_name })
+                if (data) {
+                    console.log(data[0])
+                }
+                res.send(data)
             }
-            res.send(data)
+
         }
         catch (err) {
             return res.status(422).send({ error: "error for fetching profile data" })
