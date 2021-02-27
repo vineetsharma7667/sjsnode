@@ -5,14 +5,15 @@ const FeeReceiptSchema = new Schema({
     receipt_date:{
         type:String,        
     },
+    defaulter_month:{
+        type:String,          
+    },
     receipt_no:{
-        unique:true,
         type:String,        
     },
     last_fee_date:{
         type:String,        
     },
-    
     ref_receipt_no:{
         type:String,
     },
