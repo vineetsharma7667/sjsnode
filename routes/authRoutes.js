@@ -1063,7 +1063,7 @@ router.post('/StoreStudent', upload.fields([{
     })
     router.post('/storeImportStructure', upload.single('image'),async (req, res) => {
         console.log("yes im in");
-        console.log(req.body);
+        // console.log(req.body);
         const {AllImportFeeStructure} = req.body;
         console.log("yes im in"+AllImportFeeStructure);
         try {
