@@ -1020,6 +1020,22 @@ router.post('/StoreStudent', upload.fields([{
                 console.log(err.message.toString().includes('duplicate'))  
             }
         })
+        router.post('/Importallfees',upload.single('image'),async (req, res) => {
+            console.log("yes im in");
+            // console.log(req.body);
+            const {AllFeeData} = req.body;
+            console.log("yes im in"+ AllFeeData);
+            try {
+              const  AllFeeDataa=   Receipt.insertMany(JSON.parse(AllFeeData)).then(result=>{ 
+                console.log("Data inserted")  // Success 
+                if (AllFeeDataa) {
+                    res.send(AllFeeDataa)
+                 }
+                })
+            } catch (err) {
+                console.log(err.message.toString().includes('duplicate'))  
+            }
+        })
 
         router.post('/DeleteUpgradeStudent', upload.single('image'),async (req, res) => {
             const {IdArray} = req.body;
