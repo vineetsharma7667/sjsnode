@@ -1200,20 +1200,112 @@ router.post('/StoreStudent', upload.fields([{
         console.log('yes im in' + req.body.session)
         const { session,DefaulterByMonth,class_name } = req.body;
         const defaulter_month =DefaulterByMonth
+        var _id=[];
+       
         try {
-            if(class_name ==''){
-                const data = await Receipt.find({ session,defaulter_month })
-                if (data) {
-                    console.log(data[0])
-                }
-                res.send(data)
-            } else{
-                const data = await Receipt.find({ session,defaulter_month,class_name })
-                if (data) {
-                    console.log(data[0])
-                }
-                res.send(data)
-            }
+             if(class_name !=''){
+            const data = await Receipt.aggregate(
+                [
+                    {$match: { class_name: { $in: [class_name] } }
+                },
+                  { $sort: { last_fee_date: 1,  } },
+                  {
+                    $group:
+                      {
+                        _id: "$admission_no",
+                        last_id: { $last: "$_id" }
+                      }
+                  }
+                ]
+             )
+             if(data){
+                 data.map((item,index)=>{
+                    _id.push(mongoose.Types.ObjectId(item.last_id))
+                 })
+             }
+           var alldata=  Receipt.find({
+                '_id': { $in: _id},last_fee_date: { 
+                            $lt: defaulter_month
+                        },session
+            }, function(err, docs){
+                // var docs_id=[];
+                // docs.map((item,index)=>{
+                  
+                //     docs_id.push(mongoose.Types.ObjectId(item._id))
+                //  })
+                Receipt.find({
+                    '_id': { $in: _id},session,balance: { 
+                                $lte: 0
+                            }
+                }, function(err, docss){
+                     console.log(data);
+                     var array3 = docss.filter(function(obj) { return docs.indexOf(obj) == -1; });
+                     res.send(array3)
+                });
+                 
+                //  res.send(docs)
+            });
+        }else{
+            const data = await Receipt.aggregate(
+                [
+                    // {$match: { class_name: { $in: ["PRE-NUR"] } }
+                // },
+                  { $sort: { last_fee_date: 1, _id: 1 } },
+                  {
+                    $group:
+                      {
+                        _id: "$admission_no",
+                        last_id: { $last: "$_id" }
+                      }
+                  }
+                ]
+             )
+             if(data){
+                 data.map((item,index)=>{
+                    _id.push(mongoose.Types.ObjectId(item.last_id))
+                 })
+             }
+           var alldata=  Receipt.find({
+                '_id': { $in: _id},last_fee_date: { 
+                            $lt: defaulter_month
+                        },session
+            }, function(err, docs){
+                Receipt.find({
+                    '_id': { $in: _id},session,balance: { 
+                                $lte: 0
+                            }
+                }, function(err, docss){
+                     console.log(data);
+                     var array3 = docss.filter(function(obj) { return docs.indexOf(obj) == -1; });
+                     res.send(array3)
+                });
+                //  console.log(docs.length);
+                //  res.send(docs)
+            });
+        }
+            // await Receipt.find({ '_id': { $in: _id},session, last_fee_date: { 
+            //             $lt: new Date(defaulter_month)
+            //         } })
+            
+        //    console.log(alldata);
+        //    console.log(data.length);
+            // if(class_name ==''){
+            //     const data = await Receipt.find({ session, last_fee_date: { 
+            //         $lt: new Date(defaulter_month)
+            //     } })
+            //     if (data) {
+            //         console.log(data[0])
+            //     }
+            //     res.send(data)
+            // } else{
+            //     const data = await Receipt.find({ session,last_fee_date: { 
+            //         $lt: new Date(defaulter_month)
+            //     },class_name })
+            //     if (data) {
+            //         console.log(data[0])
+            //     }
+            //     res.send(data)
+            // }
 
         }
         catch (err) {
