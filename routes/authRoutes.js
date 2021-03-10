@@ -814,11 +814,11 @@ router.post('/StoreStudent', upload.fields([{
     image4 = req.body.image4 
     }
     try {
-        const Student_data = new Student({image,image2,image3,image4,school_id,unique_id,session,date_of_admission,balance,parent,admission_no,security_no,old_admission_no,aadhar_no,class_name,section,subjects,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,reg_no,roll_no,board_roll_no,last_school,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details,account_no,father_name,mother_name,father_occu,father_designation,father_annual_income,mother_occu,mother_desgination,mother_annual_income,parent_address,parent_city,parent_state,parent_country, parent_per_address,parent_per_city,parent_per_state,parent_per_country,parent_phone,parent_mobile,gaurdian_name,gaurdian_occu,gaurdian_designation,gaurdian_annual_income,gaurdian_address,gaurdian_city,gaurdian_state,gaurdian_country,gaurdian_per_address,gaurdian_per_city,gaurdian_per_state,gaurdian_per_country,gaurdian_phone,gaurdian_mobile,religion})
+        const Student_data = new Student({image,image2,image3,image4,school_id,'tc_status':'0',unique_id,session,date_of_admission,balance,parent,admission_no,security_no,old_admission_no,aadhar_no,class_name,section,subjects,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,reg_no,roll_no,board_roll_no,last_school,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details,account_no,father_name,mother_name,father_occu,father_designation,father_annual_income,mother_occu,mother_desgination,mother_annual_income,parent_address,parent_city,parent_state,parent_country, parent_per_address,parent_per_city,parent_per_state,parent_per_country,parent_phone,parent_mobile,gaurdian_name,gaurdian_occu,gaurdian_designation,gaurdian_annual_income,gaurdian_address,gaurdian_city,gaurdian_state,gaurdian_country,gaurdian_per_address,gaurdian_per_city,gaurdian_per_state,gaurdian_per_country,gaurdian_phone,gaurdian_mobile,religion})
         await Student_data.save();
         if (Student_data) {
            await console.log("Student_data")
-            const Academic_data = new Academic({student:Student_data._id,school_id,unique_id,session,class_name,section,admission_no,account_no})
+            const Academic_data = new Academic({student:Student_data._id,'tc_status':'0',school_id,unique_id,session,class_name,section,admission_no,account_no})
             Academic_data.save();
         }
         else {
@@ -836,7 +836,20 @@ router.post('/StoreStudent', upload.fields([{
         const { session,school_id} = req.body
         console.log(req.body)
         try {
-                await Academic.find({session,school_id}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+                await Academic.find({session,school_id,tc_status:"0"}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+                console.log("gfgfdgfdgfdgsadsadadsa",data)
+                res.send(data)
+            })
+        }
+        catch (err) {
+            return res.status(422).send({ error: "error for fetching food data" })
+        }
+    })
+    router.post('/singleparentdata', async (req, res) => {
+        const { session,account_no} = req.body
+        console.log(req.body)
+        try {
+                await Academic.find({session,account_no,'tc_status':'0'}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
                 console.log("gfgfdgfdgfdgsadsadadsa",data)
                 res.send(data)
             })
@@ -849,7 +862,7 @@ router.post('/StoreStudent', upload.fields([{
         const { session, class_name} = req.body
         console.log(req.body)
         try {
-             await Academic.find({session,class_name}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+             await Academic.find({session,class_name,tc_status:"0"}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
                 console.log("gfgfdgfdgfdgsadsadadsa",data)
                 res.send(data)
             })
@@ -862,7 +875,7 @@ router.post('/StoreStudent', upload.fields([{
         const { session, class_name,section} = req.body
         console.log(req.body)
         try {
-             await Academic.find({session,class_name,section}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+             await Academic.find({session,class_name,section,tc_status:"0"}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
                 console.log("gfgfdgfdgfdgsadsadadsa",data)
                 res.send(data)
             })
@@ -875,7 +888,7 @@ router.post('/StoreStudent', upload.fields([{
         const { session,admission_no,school_id} = req.body
         console.log(req.body)
         try {
-             await Academic.find({session,admission_no,school_id}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+             await Academic.find({session,admission_no,school_id,'tc_status':'0'}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
                 console.log("gfgfdgfdgfdgsadsadadsa",data)
                 res.send(data)
             })
@@ -1005,7 +1018,7 @@ router.post('/StoreStudent', upload.fields([{
                 console.log("Data inserted")  // Success 
                 if (Student_data) {
                     for (var i = 0; i <result.length; i++) {
-                     const Academic_data = new Academic({student:result[i]._id,school_id:result[i].school_id,unique_id:result[i].unique_id,session:result[i].session,class_name:result[i].class_name,section:result[i].section,admission_no:result[i].admission_no,account_no:result[i].account_no})
+                     const Academic_data = new Academic({student:result[i]._id,school_id:result[i].school_id,unique_id:result[i].unique_id,session:result[i].session,class_name:result[i].class_name,section:result[i].section,admission_no:result[i].admission_no,account_no:result[i].account_no,tc_status:result[i].tc_status})
                      Academic_data.save();
                     }
                  }
@@ -1036,7 +1049,6 @@ router.post('/StoreStudent', upload.fields([{
                 console.log(err.message.toString().includes('duplicate'))  
             }
         })
-
         router.post('/DeleteUpgradeStudent', upload.single('image'),async (req, res) => {
             const {IdArray} = req.body;
                 Academic.deleteMany(
@@ -1164,9 +1176,9 @@ router.post('/StoreStudent', upload.fields([{
 // Start Fee Receipt routes
     router.post('/StoreReceipt', upload.single('image'), async (req, res) => {
     console.log(req.body);
-    const {receipt_date,defaulter_month,name,receipt_no,ref_receipt_no,last_fee_date,session,admission_no,class_name,section,prospectus_fee,registration_fee,admission_fee,security_fee,account_no,paid_fees,Allfees,paid_month,paid_months,fine,paid_amount,balance,total_one_time_fee,total_monthly_fee,total_annual_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date} = req.body;
+    const {receipt_date,take_computer,fee_concession,is_full_free_ship,is_teacher_ward,fees,defaulter_month,name,receipt_no,ref_receipt_no,last_fee_date,session,admission_no,class_name,section,prospectus_fee,registration_fee,admission_fee,security_fee,account_no,paid_fees,Allfees,paid_month,paid_months,fine,paid_amount,balance,total_one_time_fee,total_monthly_fee,total_annual_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date} = req.body;
     try {
-        const Fee_structure_data = new Receipt({receipt_date,defaulter_month,name,receipt_no,last_fee_date,ref_receipt_no,session,admission_no,class_name,section,prospectus_fee,registration_fee,admission_fee,security_fee,account_no,paid_fees,Allfees,paid_month,paid_months,fine,paid_amount,balance,total_one_time_fee,total_monthly_fee,total_annual_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date})
+        const Fee_structure_data = new Receipt({receipt_date,take_computer,fee_concession,is_full_free_ship,is_teacher_ward,fees,defaulter_month,name,receipt_no,last_fee_date,ref_receipt_no,session,admission_no,class_name,section,prospectus_fee,registration_fee,admission_fee,security_fee,account_no,paid_fees,Allfees,paid_month,paid_months,fine,paid_amount,balance,total_one_time_fee,total_monthly_fee,total_annual_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date})
         await Fee_structure_data.save();
         if (Fee_structure_data) {
             console.log("Fee_structure_data")
@@ -1203,7 +1215,7 @@ router.post('/StoreStudent', upload.fields([{
         var _id=[];
        
         try {
-             if(class_name !=''){
+            if(class_name !=''){
             const data = await Receipt.aggregate(
                 [
                     {$match: { class_name: { $in: [class_name] } }
@@ -1232,19 +1244,20 @@ router.post('/StoreStudent', upload.fields([{
                 // docs.map((item,index)=>{
                   
                 //     docs_id.push(mongoose.Types.ObjectId(item._id))
-                //  })
+                //  }) 
+
                 Receipt.find({
                     '_id': { $in: _id},session,balance: { 
                                 $lte: 0
                             }
                 }, function(err, docss){
-                     console.log(data);
+                    //  console.log(data);
                      var array3 = docss.filter(function(obj) { return docs.indexOf(obj) == -1; });
                      res.send(array3)
-                });
+                }).sort({ section: 1 });
                  
                 //  res.send(docs)
-            });
+            }).sort({ section: 1 });
         }else{
             const data = await Receipt.aggregate(
                 [
@@ -1274,14 +1287,14 @@ router.post('/StoreStudent', upload.fields([{
                     '_id': { $in: _id},session,balance: { 
                                 $lte: 0
                             }
-                }, function(err, docss){
-                     console.log(data);
+                },function(err, docss){
+                    //  console.log(data);
                      var array3 = docss.filter(function(obj) { return docs.indexOf(obj) == -1; });
                      res.send(array3)
-                });
+                }).sort({ class_name: 1 });;
                 //  console.log(docs.length);
                 //  res.send(docs)
-            });
+            }).sort({ class_name: 1 });
         }
             // await Receipt.find({ '_id': { $in: _id},session, last_fee_date: { 
             //             $lt: new Date(defaulter_month)

@@ -240,7 +240,7 @@ const StudentSchema = new Schema({
     gaurdian_mobile:{
         type:String,     
     },
-    tc:{
+    tc_status:{
         type:String,        
     }, 
     struck_off:{
