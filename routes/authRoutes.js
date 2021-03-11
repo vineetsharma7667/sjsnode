@@ -35,7 +35,8 @@ multer({
   })
 router.use(cors({ origin: true }));
 //code for images
-var multer = require('multer')
+var multer = require('multer');
+const e = require('express');
 
 var storage = multer.diskStorage({
 
@@ -814,11 +815,11 @@ router.post('/StoreStudent', upload.fields([{
     image4 = req.body.image4 
     }
     try {
-        const Student_data = new Student({image,image2,image3,image4,school_id,'tc_status':'0',unique_id,session,date_of_admission,balance,parent,admission_no,security_no,old_admission_no,aadhar_no,class_name,section,subjects,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,reg_no,roll_no,board_roll_no,last_school,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details,account_no,father_name,mother_name,father_occu,father_designation,father_annual_income,mother_occu,mother_desgination,mother_annual_income,parent_address,parent_city,parent_state,parent_country, parent_per_address,parent_per_city,parent_per_state,parent_per_country,parent_phone,parent_mobile,gaurdian_name,gaurdian_occu,gaurdian_designation,gaurdian_annual_income,gaurdian_address,gaurdian_city,gaurdian_state,gaurdian_country,gaurdian_per_address,gaurdian_per_city,gaurdian_per_state,gaurdian_per_country,gaurdian_phone,gaurdian_mobile,religion})
+        const Student_data = new Student({image,image2,image3,image4,school_id,tc_status:'0',unique_id,session,date_of_admission,balance,parent,admission_no,security_no,old_admission_no,aadhar_no,class_name,section,subjects,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,reg_no,roll_no,board_roll_no,last_school,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details,account_no,father_name,mother_name,father_occu,father_designation,father_annual_income,mother_occu,mother_desgination,mother_annual_income,parent_address,parent_city,parent_state,parent_country, parent_per_address,parent_per_city,parent_per_state,parent_per_country,parent_phone,parent_mobile,gaurdian_name,gaurdian_occu,gaurdian_designation,gaurdian_annual_income,gaurdian_address,gaurdian_city,gaurdian_state,gaurdian_country,gaurdian_per_address,gaurdian_per_city,gaurdian_per_state,gaurdian_per_country,gaurdian_phone,gaurdian_mobile,religion})
         await Student_data.save();
         if (Student_data) {
            await console.log("Student_data")
-            const Academic_data = new Academic({student:Student_data._id,'tc_status':'0',school_id,unique_id,session,class_name,section,admission_no,account_no})
+            const Academic_data = new Academic({student:Student_data._id,tc_status:'0',school_id,unique_id,session,class_name,section,admission_no,account_no})
             Academic_data.save();
         }
         else {
@@ -849,7 +850,7 @@ router.post('/StoreStudent', upload.fields([{
         const { session,account_no} = req.body
         console.log(req.body)
         try {
-                await Academic.find({session,account_no,'tc_status':'0'}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+                await Academic.find({session,account_no,tc_status:'0'}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
                 console.log("gfgfdgfdgfdgsadsadadsa",data)
                 res.send(data)
             })
@@ -888,7 +889,7 @@ router.post('/StoreStudent', upload.fields([{
         const { session,admission_no,school_id} = req.body
         console.log(req.body)
         try {
-             await Academic.find({session,admission_no,school_id,'tc_status':'0'}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+             await Academic.find({session,admission_no,school_id,tc_status:'0'}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
                 console.log("gfgfdgfdgfdgsadsadadsa",data)
                 res.send(data)
             })
@@ -984,6 +985,44 @@ router.post('/StoreStudent', upload.fields([{
             }
         })
     })
+
+    router.post('/StudentStrenght', async (req, res) => {
+        console.log('yes im in' + req.body.class_name)
+        const {session,section,class_name } = req.body;
+        if(section ==""){
+            try {
+                if(class_name!="PRE-NUR"){
+                await Academic.find({session,class_name,tc_status:"0"}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+                    console.log("gfgfdgfdgfdgsadsadadsa",data)
+                    res.send(data)
+                })
+                }else{
+                    await Academic.find({session,class_name,section,tc_status:"0"}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+                        console.log("gfgfdgfdgfdgsadsadadsa",data)
+                        res.send(data)
+                    })
+                }
+             }
+             catch (err) {
+                 return res.status(422).send({ error: "error for fetching profile data" })
+            }
+        }
+        else{
+            try {
+                await Academic.find({session,class_name,section,tc_status:'0'}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+                    console.log("gfgfdgfdgfdgsadsadadsa",data)
+                    res.send(data)
+                })
+             }
+             catch (err) {
+                 return res.status(422).send({ error: "error for fetching profile data" })
+             }
+        }
+       
+    })
+
+
+
     router.delete('/deleteFeeStructure', (req, res) => {
         const { _id } = req.body
         console.log(_id)
