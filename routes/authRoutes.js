@@ -1374,8 +1374,58 @@ router.post('/StoreStudent', upload.fields([{
             res.send(data)
         }
         catch (err) {
-            return res.status(422).send({ error: "error for fetching food data" })
+            // return res.status(422).send({ error: "error for fetching food data" })
         }
+    })
+    router.post('/getFeeReceipt', async (req, res) => {
+        console.log('yes im in' + req.body.session)
+        const { session } = req.body;
+            try {
+                const dataa = await Receipt.findOne({ session }).sort({ _id: -1 }).exec((err,data)=>{
+                    console.log("gfgfdgfdgfdgsadsadadsa",data)
+                    
+                    if(data !=null){
+                    res.send(data)
+                    }else{
+                    res.send([undefined]) 
+                    }
+                    console.log("vineet"+data)
+                })
+               
+                 console.log("vineet"+dataa)
+                //  res.send(dataa)
+             }
+             catch (err) {
+                 return res.status(422).send({ error: "error for fetching Receipt data" })
+             }
+      
+    
+       
+    })
+    router.post('/getadmission_no', async (req, res) => {
+        console.log('yes im in' + req.body.session)
+        const { session } = req.body;
+            try {
+                const dataa = await Academic.findOne({}).sort({ _id: -1 }).exec((err,data)=>{
+                    console.log("gfgfdgfdgfdgsadsadadsa",data)
+                    
+                    if(data !=null){
+                    res.send(data)
+                    }else{
+                    res.send([undefined]) 
+                    }
+                    console.log("vineet"+data)
+                })
+               
+                 console.log("vineet"+dataa)
+                //  res.send(dataa)
+             }
+             catch (err) {
+                 return res.status(422).send({ error: "error for fetching Receipt data" })
+             }
+      
+    
+       
     })
     // router.post('/getSummary', upload.single('image'), async (req, res) => {
     //     console.log(req.body);
