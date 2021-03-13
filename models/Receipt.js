@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const FeeReceiptSchema = new Schema({
     unique_id:{
         type:String, 
+        unique:true
     },
     take_computer:{
         type:String, 

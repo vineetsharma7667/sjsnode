@@ -1216,8 +1216,9 @@ router.post('/StoreStudent', upload.fields([{
     router.post('/StoreReceipt', upload.single('image'), async (req, res) => {
     console.log(req.body);
     const {receipt_date,take_computer,fee_concession,is_full_free_ship,is_teacher_ward,fees,defaulter_month,name,receipt_no,ref_receipt_no,last_fee_date,session,admission_no,class_name,section,prospectus_fee,registration_fee,admission_fee,security_fee,account_no,paid_fees,Allfees,paid_month,paid_months,fine,paid_amount,balance,total_one_time_fee,total_monthly_fee,total_annual_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date} = req.body;
+   const unique_id =session+receipt_no+admission_no
     try {
-        const Fee_structure_data = new Receipt({receipt_date,take_computer,fee_concession,is_full_free_ship,is_teacher_ward,fees,defaulter_month,name,receipt_no,last_fee_date,ref_receipt_no,session,admission_no,class_name,section,prospectus_fee,registration_fee,admission_fee,security_fee,account_no,paid_fees,Allfees,paid_month,paid_months,fine,paid_amount,balance,total_one_time_fee,total_monthly_fee,total_annual_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date})
+        const Fee_structure_data = new Receipt({unique_id,receipt_date,take_computer,fee_concession,is_full_free_ship,is_teacher_ward,fees,defaulter_month,name,receipt_no,last_fee_date,ref_receipt_no,session,admission_no,class_name,section,prospectus_fee,registration_fee,admission_fee,security_fee,account_no,paid_fees,Allfees,paid_month,paid_months,fine,paid_amount,balance,total_one_time_fee,total_monthly_fee,total_annual_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date})
         await Fee_structure_data.save();
         if (Fee_structure_data) {
             console.log("Fee_structure_data")
