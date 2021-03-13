@@ -24,6 +24,8 @@ require('./models/FeeStructure');
 require('./models/Receipt');
 require('./models/Fine');
 require('./models/Bank');
+require('./models/SuspensionalFee');
+
 
 const requireToken= require('./middleware/requireToken');
 app.use(bodyParser.json());

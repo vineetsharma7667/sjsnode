@@ -26,6 +26,8 @@ const Fine = mongoose.model('Fine')
 const FeeStructure = mongoose.model('FeeStructure')
 const Receipt = mongoose.model('Receipt')
 const Bank = mongoose.model('Bank')
+const SuspensionalFee = mongoose.model('SuspensionalFee')
+
 
 
 const cors = require('cors');
@@ -88,7 +90,61 @@ var storage = multer.diskStorage({
         }
     })
 // End Signin routes
+// Suspensioanle fee
+router.post('/StoreSuspensionalVoucher', upload.single('image'), async (req, res) => {
+    const { admission_no,remark,account_no,receipt_date,class_name,amount } = req.body;
+    try {
+        const SuspensionalFees = new SuspensionalFee({admission_no,remark,account_no,receipt_date,class_name,amount })
+        await SuspensionalFees.save();
+        if (SuspensionalFees) {
+            console.log("SuspensionalFees")
+        }
+        else {
+            console.log("data is not stored")
+        }
+        console.log(SuspensionalFees);
+        res.send(SuspensionalFees)
+    } catch (err) {
+        return res.status(422).send(err.message)
+     
+    }
+    })
 
+    router.get('/getSuspensionalFee', async (req, res) => {
+    try {
+        const data = await SuspensionalFee.find()
+        if (data) {
+            console.log(data[0])
+        }
+        console.log(data[0])
+        res.send(data)
+    }
+    catch (err) {
+        return res.status(422).send({ error: "error for fetching food data" })
+    }
+    })
+
+    router.put('/SuspensionalFeeData', upload.single('image') ,async (req, res) => {
+        console.log("Yes I Am In")
+        const { _id,admission_no,remark,account_no,receipt_date,class_name,amount  } = req.body;
+        // const image = req.file.path
+        SuspensionalFee.findByIdAndUpdate({_id},{ admission_no,remark,account_no,receipt_date,class_name,amount  }, function(err, result){
+            if(err){
+                res.send(err)
+            }
+            else{
+                res.send(result)
+            }
+        })
+    })
+
+    router.delete('/deleteSuspensionalFee', (req, res) => {
+        const { _id } = req.body
+        console.log(_id)
+        SuspensionalFee.findByIdAndRemove(_id).exec();
+        res.send({ res: "Deleted Sucessfully" })
+    })
+// End Suspensioanle fee
 // Start Fee category routes
 router.post('/StoreFeeCatogory', upload.single('image'), async (req, res) => {
 const { category,description } = req.body;
