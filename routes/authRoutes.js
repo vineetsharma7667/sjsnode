@@ -699,11 +699,9 @@ router.post('/StoreSubject', upload.single('image'), async (req, res) => {
     }
     })
 
-    
-    router.post('/getSubjects', async (req, res) => {
-            const {  school_id} = req.body
+    router.get('/getSubjects', async (req, res) => {
         try {
-            const data = await Subject.find({school_id})
+            const data = await Subject.find()
             if (data) {
                 console.log(data[0])
             }
@@ -713,7 +711,6 @@ router.post('/StoreSubject', upload.single('image'), async (req, res) => {
         catch (err) {
             return res.status(422).send({ error: "error for fetching food data" })
         }
-        
     })
     router.put('/updateSubject', upload.single('image') ,async (req, res) => {
         console.log("Yes I Am In")
@@ -1306,12 +1303,57 @@ router.post('/StoreStudent', upload.fields([{
     })
     router.post('/DefaulterByMonth', async (req, res) => {
         console.log('yes im in' + req.body.session)
-        const { session,DefaulterByMonth,class_name } = req.body;
+        const { session,DefaulterByMonth,class_name,section } = req.body;
         const defaulter_month =DefaulterByMonth
         var _id=[];
        
         try {
-            if(class_name !=''){
+            if(class_name !='' && section !='' ){
+            const data = await Receipt.aggregate(
+                [
+                    {$match: { class_name: { $in: [class_name] },section: { $in: [section] } }
+                },
+                  { $sort: { last_fee_date: 1,  } },
+                  {
+                    $group:
+                      {
+                        _id: "$admission_no",
+                        last_id: { $last: "$_id" }
+                      }
+                  }
+                ]
+             )
+             if(data){
+                 data.map((item,index)=>{
+                    _id.push(mongoose.Types.ObjectId(item.last_id))
+                 })
+             }
+           var alldata=  Receipt.find({
+                '_id': { $in: _id},last_fee_date: { 
+                            $lt: defaulter_month
+                        },session
+            }, function(err, docs){
+                // var docs_id=[];
+                // docs.map((item,index)=>{
+                  
+                //     docs_id.push(mongoose.Types.ObjectId(item._id))
+                //  }) 
+
+
+                // ,balance: { 
+                //     $lte: 0
+                // }
+                Receipt.find({
+                    '_id': { $in: _id},session
+                }, function(err, docss){
+                    //  console.log(data);
+                     var array3 = docss.filter(function(obj) { return docs.indexOf(obj) == -1; });
+                     res.send(array3)
+                }).sort({ section: 1 });
+                 
+                //  res.send(docs)
+            }).sort({ section: 1 });
+        }else if(class_name !='' && section ==''){
             const data = await Receipt.aggregate(
                 [
                     {$match: { class_name: { $in: [class_name] } }
@@ -1343,9 +1385,7 @@ router.post('/StoreStudent', upload.fields([{
                 //  }) 
 
                 Receipt.find({
-                    '_id': { $in: _id},session,balance: { 
-                                $lte: 0
-                            }
+                    '_id': { $in: _id},session
                 }, function(err, docss){
                     //  console.log(data);
                      var array3 = docss.filter(function(obj) { return docs.indexOf(obj) == -1; });
@@ -1354,7 +1394,8 @@ router.post('/StoreStudent', upload.fields([{
                  
                 //  res.send(docs)
             }).sort({ section: 1 });
-        }else{
+        }
+        else{
             const data = await Receipt.aggregate(
                 [
                     // {$match: { class_name: { $in: ["PRE-NUR"] } }
@@ -1380,9 +1421,7 @@ router.post('/StoreStudent', upload.fields([{
                         },session
             }, function(err, docs){
                 Receipt.find({
-                    '_id': { $in: _id},session,balance: { 
-                                $lte: 0
-                            }
+                    '_id': { $in: _id},session
                 },function(err, docss){
                     //  console.log(data);
                      var array3 = docss.filter(function(obj) { return docs.indexOf(obj) == -1; });
