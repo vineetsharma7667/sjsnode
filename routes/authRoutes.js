@@ -899,6 +899,19 @@ router.post('/StoreStudent', upload.fields([{
             return res.status(422).send({ error: "error for fetching food data" })
         }
     })
+    // router.post('/getStudentCount', async (req, res) => {
+    //     const { session} = req.body
+    //     console.log(req.body)
+    //     try {
+    //             await Academic.find({session,tc_status:"0"}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+    //             console.log("gfgfdgfdgfdgsadsadadsa",data)
+    //             res.send(data.length)
+    //         })
+    //     }
+    //     catch (err) {
+    //         return res.status(422).send({ error: "error for fetching food data" })
+    //     }
+    // })
     router.post('/singleparentdata', async (req, res) => {
         const { session,account_no} = req.body
         console.log(req.body)
@@ -1042,10 +1055,21 @@ router.post('/StoreStudent', upload.fields([{
     router.post('/StudentStrenght', async (req, res) => {
         console.log('yes im in' + req.body.class_name)
         const {session,section,class_name } = req.body;
-        if(section ==""){
+         if(class_name == ""){
+            try {
+                await Academic.find({session,tc_status:'0'}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+                    console.log("gfgfdgfdgfdgsadsadadsa",data)
+                    res.send(data)
+                })
+             }
+             catch (err) {
+                 return res.status(422).send({ error: "error for fetching profile data" })
+             }
+        }
+        else if(section ==""){
             try {
                 if(class_name!="PRE-NUR"){
-                await Academic.find({session,class_name,tc_status:"0"}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+                await Academic.find({session,class_name,tc_status:"0"}).populate('student').sort({ section: 1 }).exec((err,data)=>{
                     console.log("gfgfdgfdgfdgsadsadadsa",data)
                     res.send(data)
                 })
@@ -1061,8 +1085,9 @@ router.post('/StoreStudent', upload.fields([{
             }
         }
         else{
+            console.log("yes ia am in vineet")
             try {
-                await Academic.find({session,class_name,section,tc_status:'0'}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+                await Academic.find({session,class_name,section,tc_status:'0'}).populate('student').sort({ section: -1 }).exec((err,data)=>{
                     console.log("gfgfdgfdgfdgsadsadadsa",data)
                     res.send(data)
                 })
