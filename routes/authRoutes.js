@@ -92,9 +92,9 @@ var storage = multer.diskStorage({
 // End Signin routes
 // Suspensioanle fee
 router.post('/StoreSuspensionalVoucher', upload.single('image'), async (req, res) => {
-    const { admission_no,remark,account_no,receipt_date,class_name,amount } = req.body;
+    const { admission_no,bank,remark,account_no,receipt_date,class_name,amount } = req.body;
     try {
-        const SuspensionalFees = new SuspensionalFee({admission_no,remark,account_no,receipt_date,class_name,amount })
+        const SuspensionalFees = new SuspensionalFee({admission_no,bank,remark,account_no,receipt_date,class_name,amount })
         await SuspensionalFees.save();
         if (SuspensionalFees) {
             console.log("SuspensionalFees")
@@ -126,9 +126,9 @@ router.post('/StoreSuspensionalVoucher', upload.single('image'), async (req, res
 
     router.put('/SuspensionalFeeData', upload.single('image') ,async (req, res) => {
         console.log("Yes I Am In")
-        const { _id,admission_no,remark,account_no,receipt_date,class_name,amount  } = req.body;
+        const { _id,admission_no,bank,remark,account_no,receipt_date,class_name,amount  } = req.body;
         // const image = req.file.path
-        SuspensionalFee.findByIdAndUpdate({_id},{ admission_no,remark,account_no,receipt_date,class_name,amount  }, function(err, result){
+        SuspensionalFee.findByIdAndUpdate({_id},{ admission_no,bank,remark,account_no,receipt_date,class_name,amount  }, function(err, result){
             if(err){
                 res.send(err)
             }

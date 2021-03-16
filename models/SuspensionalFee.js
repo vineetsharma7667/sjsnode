@@ -17,6 +17,9 @@ const SuspensionalFeeSchema = new Schema({
     receipt_date:{
         type:String,        
     }, 
+    bank:{
+        type:String,        
+    }, 
     amount:{
         type:String,        
     }, 
