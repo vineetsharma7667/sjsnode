@@ -331,6 +331,12 @@ router.post('/StoreSession', upload.single('image'), async (req, res) => {
             
         }
     })
+    router.delete('/deleteSession', (req, res) => {
+        const { _id } = req.body
+        console.log(_id)
+        Session.findByIdAndRemove(_id).exec();
+        res.send({ res: "Deleted Sucessfully" })
+    })
 // end Session routes
 
 // Start Class routes
@@ -1527,7 +1533,7 @@ router.post('/StoreStudent', upload.fields([{
         console.log('yes im in' + req.body.session)
         const { session } = req.body;
             try {
-                const dataa = await Academic.findOne({}).sort({ _id: -1 }).exec((err,data)=>{
+                const dataa = await Student.findOne({}).sort({ _id: -1 }).exec((err,data)=>{
                     console.log("gfgfdgfdgfdgsadsadadsa",data)
                     
                     if(data !=null){
