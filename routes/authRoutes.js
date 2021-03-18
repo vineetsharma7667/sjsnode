@@ -1063,7 +1063,7 @@ router.post('/StoreStudent', upload.fields([{
         const {session,section,class_name } = req.body;
          if(class_name == ""){
             try {
-                await Academic.find({session,tc_status:'0'}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+                await Academic.find({session,tc_status:'0'}).populate('student').sort({ class_name: 1 }).exec((err,data)=>{
                     console.log("gfgfdgfdgfdgsadsadadsa",data)
                     res.send(data)
                 })
