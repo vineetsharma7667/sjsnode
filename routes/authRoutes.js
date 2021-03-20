@@ -430,11 +430,10 @@ router.post('/StoreSection', upload.single('image'), async (req, res) => {
         return res.status(422).send(err.message)
     }
     })
-
     router.post('/getSection', async (req, res) => {
         const {  school_id} = req.body
         try {
-            const data = await Section.find({school_id})
+            const data = await Section.find({school_id}).sort({class_name:1})
             if (data) {
                 console.log(data[0])
             }
