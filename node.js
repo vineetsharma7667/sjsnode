@@ -44,6 +44,8 @@ app.use(cors({ origin: true }));
 app.use('/public', express.static('public'));
 const authRoutes = require('./routes/authRoutes');
 app.use(authRoutes);
+mongoose.set('useNewUrlParser',true);
+mongoose.set('useCreateIndex',true);
 mongoose.connect(mongoUrl,{
     auth: {
         "user":"admin2",

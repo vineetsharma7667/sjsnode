@@ -1190,6 +1190,18 @@ router.post('/StoreStudent', upload.fields([{
                             }
                         );
         })
+        router.put('/UpdateReceipt', upload.single('image') ,async (req, res) => {
+            const { _id,bank,paid_month,receipt_no,receipt_date,last_fee_date} = req.body;
+            // const image = req.file.path
+            Receipt.findByIdAndUpdate({_id},{bank,paid_month,receipt_no,receipt_date,last_fee_date}, function(err, result){
+                if(err){
+                    res.send(err)
+                }
+                else{
+                    res.send(result)
+                }
+            })
+        })
 // end Student routes
 // Start Fee Structure routes
     router.post('/StoreFeeStructure', upload.single('image'), async (req, res) => {
