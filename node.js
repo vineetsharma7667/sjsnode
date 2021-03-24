@@ -32,7 +32,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.json({
     limit: '10000mb'
   }));
-  
+  // app.use(express.bodyParser({limit: '256mb'}));
   app.use(bodyParser.urlencoded({
     limit: '10000mb',
     parameterLimit: 1000000,

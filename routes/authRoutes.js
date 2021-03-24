@@ -63,9 +63,9 @@ var storage = multer.diskStorage({
 // })
 // var upload = multer({ storage: storage })
 //end code for images
-
-
 // signin Routes
+
+
     router.post('/signin', async (req, res) => {
         console.log("yes im vineet")
         const { username, password,} = req.body
@@ -703,7 +703,6 @@ router.post('/StoreSubject', upload.single('image'), async (req, res) => {
      
     }
     })
-
     router.get('/getSubjects', async (req, res) => {
         try {
             const data = await Subject.find()
@@ -792,8 +791,6 @@ router.post('/StoreHouse', upload.single('image'), async (req, res) => {
         res.send({ res: "Deleted Sucessfully" })
     })
 // end House routes
-
-
 // Start Parent routes
 router.post('/StoreParent', upload.single('image'), async (req, res) => {
     console.log(req.body);
@@ -1157,9 +1154,10 @@ router.post('/StoreStudent', upload.fields([{
         })
         router.post('/Importallfees',upload.single('image'),async (req, res) => {
             console.log("yes im in");
-            // console.log(req.body);
+            
             const {AllFeeData} = req.body;
-            console.log("yes im in"+ AllFeeData);
+            console.log(AllFeeData.length);
+            // console.log("yes im in"+ AllFeeData);
             try {
               const  AllFeeDataa=   Receipt.insertMany(JSON.parse(AllFeeData)).then(result=>{ 
                 console.log("Data inserted")  // Success 
@@ -1191,9 +1189,9 @@ router.post('/StoreStudent', upload.fields([{
                         );
         })
         router.put('/UpdateReceipt', upload.single('image') ,async (req, res) => {
-            const { _id,bank,paid_month,receipt_no,receipt_date,last_fee_date} = req.body;
+            const { _id,bank,paid_month,receipt_no,receipt_date,last_fee_date,balance} = req.body;
             // const image = req.file.path
-            Receipt.findByIdAndUpdate({_id},{bank,paid_month,receipt_no,receipt_date,last_fee_date}, function(err, result){
+            Receipt.findByIdAndUpdate({_id},{bank,paid_month,receipt_no,receipt_date,last_fee_date,balance}, function(err, result){
                 if(err){
                     res.send(err)
                 }
