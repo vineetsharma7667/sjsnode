@@ -50,9 +50,8 @@ var storage = multer.diskStorage({
         callback(null, Date.now() + file.originalname)
       }
     });
-    
-    const upload = multer({ storage: storage });
 
+    const upload = multer({ storage: storage });
 // var storage = multer.diskStorage({
 //     destination: function (req, file, cb) {
 //         cb(null, './public/uploads/')
@@ -64,8 +63,6 @@ var storage = multer.diskStorage({
 // var upload = multer({ storage: storage })
 //end code for images
 // signin Routes
-
-
     router.post('/signin', async (req, res) => {
         console.log("yes im vineet")
         const { username, password,} = req.body
@@ -106,10 +103,8 @@ router.post('/StoreSuspensionalVoucher', upload.single('image'), async (req, res
         res.send(SuspensionalFees)
     } catch (err) {
         return res.status(422).send(err.message)
-     
     }
     })
-
     router.get('/getSuspensionalFee', async (req, res) => {
     try {
         const data = await SuspensionalFee.find()
