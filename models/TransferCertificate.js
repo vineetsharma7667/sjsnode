@@ -108,6 +108,9 @@ const TransferCertificateSchema = new Schema({
     left_on:{
         type:String, 
     },
+    academic_id:{
+        type:String, 
+    },
     student:{ type:Schema.Types.ObjectId,
         ref:"Student"
      },
