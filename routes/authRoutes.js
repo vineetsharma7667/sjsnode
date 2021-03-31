@@ -947,6 +947,19 @@ router.post('/StoreStudent', upload.fields([{
             return res.status(422).send({ error: "error for fetching food data" })
         }
     })
+    router.post('/getStudentAccount_no', async (req, res) => {
+        // const { session,school_id} = req.body
+        console.log(req.body+"account no")
+        try {
+                await Academic.find({tc_status:"0"}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+                console.log("gfgfdgfdgfdgsadsadadsa",data)
+                res.send(data)
+            })
+        }
+        catch (err) {
+            return res.status(422).send({ error: "error for fetching food data" })
+        }
+    })
     // router.post('/getStudentCount', async (req, res) => {
     //     const { session} = req.body
     //     console.log(req.body)
@@ -964,7 +977,7 @@ router.post('/StoreStudent', upload.fields([{
         const { session,account_no} = req.body
         console.log(req.body)
         try {
-                await Academic.find({session,account_no,tc_status:'0'}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+                await Academic.find({account_no,tc_status:'0'}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
                 console.log("gfgfdgfdgfdgsadsadadsa",data)
                 res.send(data)
             })
