@@ -1057,7 +1057,7 @@ router.post('/StoreStudent', upload.fields([{
         const { session,admission_no,school_id} = req.body
         console.log(req.body)
         try {
-             await Academic.find({session,admission_no,school_id,tc_status:'0'}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+             await Academic.find({session,admission_no,school_id}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
                 console.log("gfgfdgfdgfdgsadsadadsa",data)
                 res.send(data)
             })
@@ -1407,20 +1407,32 @@ router.post('/StoreStudent', upload.fields([{
 // end Fee Structure routes
 // Start Fee Receipt routes
     router.post('/StoreReceipt', upload.single('image'), async (req, res) => {
-    console.log(req.body);
-    const {receipt_date,take_computer,fee_concession,is_full_free_ship,is_teacher_ward,fees,defaulter_month,name,receipt_no,ref_receipt_no,last_fee_date,session,admission_no,class_name,section,prospectus_fee,registration_fee,admission_fee,security_fee,account_no,paid_fees,Allfees,paid_month,paid_months,fine,paid_amount,balance,total_one_time_fee,total_monthly_fee,total_annual_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date} = req.body;
-   const unique_id =session+receipt_no+admission_no
+    console.log("unique_id"+req.body.unique_id);
+    const {receipt_date,take_computer,fee_concession,is_full_free_ship,is_teacher_ward,fees,defaulter_month,name,ref_receipt_no,last_fee_date,session,admission_no,class_name,section,prospectus_fee,registration_fee,admission_fee,security_fee,account_no,paid_fees,Allfees,paid_month,paid_months,fine,paid_amount,balance,total_one_time_fee,total_monthly_fee,total_annual_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date,unique_id} = req.body;
     try {
-        const Fee_structure_data = new Receipt({unique_id,receipt_date,take_computer,fee_concession,is_full_free_ship,is_teacher_ward,fees,defaulter_month,name,receipt_no,last_fee_date,ref_receipt_no,session,admission_no,class_name,section,prospectus_fee,registration_fee,admission_fee,security_fee,account_no,paid_fees,Allfees,paid_month,paid_months,fine,paid_amount,balance,total_one_time_fee,total_monthly_fee,total_annual_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date})
-        await Fee_structure_data.save();
+        const dataa = await Receipt.findOne({ session }).sort({ _id: -1 }).exec((err,data)=>{
+            var receipt_no
+            if(data !=null){
+                 receipt_no= parseInt(data.receipt_no)+1
+            }else{
+                receipt_no= 1
+            }
+              
+                const Fee_structure_data = new Receipt({unique_id:session+receipt_no,receipt_date,take_computer,fee_concession,is_full_free_ship,is_teacher_ward,fees,defaulter_month,name,receipt_no,last_fee_date,ref_receipt_no,session,admission_no,class_name,section,prospectus_fee,registration_fee,admission_fee,security_fee,account_no,paid_fees,Allfees,paid_month,paid_months,fine,paid_amount,balance,total_one_time_fee,total_monthly_fee,total_annual_fee,grand_total,payment_mode,bank,bank_v_no,check_no,bank_date})
+         Fee_structure_data.save();
         if (Fee_structure_data) {
             console.log("Fee_structure_data")
         }
         else {
             console.log("data is not stored")
         }
-        console.log(Fee_structure_data);
+        // console.log(Fee_structure_data);
         res.send(Fee_structure_data)
+            
+           
+        })
+       
+    
     } catch (err) {
         return res.status(422).send(err.message)
      
@@ -1782,6 +1794,37 @@ router.post('/StoreStudent', upload.fields([{
         }else{
             try {
                 const data = await Receipt.find({ bank,receipt_date })
+                 if (data) {
+                     console.log(data[0])
+                 }
+                 res.send(data)
+             }
+             catch (err) {
+                 return res.status(422).send({ error: "error for fetching profile data" })
+             }
+        }
+       
+    })
+    router.post('/suspiciousVoucher', async (req, res) => {
+        console.log('yes im in' + req.body.Bank)
+        const { Bank,VoucherDate,class_name} = req.body;
+        const receipt_date = VoucherDate
+        const bank = Bank
+        if(Bank =="" ){
+            try {
+                const data = await SuspensionalFee.find({receipt_date})
+                 if (data) {
+                     console.log(data[0])
+                 }
+                 res.send(data)
+             }
+             catch (err) {
+                 return res.status(422).send({ error: "error for fetching profile data" })
+             }
+        }
+        else{
+            try {
+                const data = await SuspensionalFee.find({ bank,receipt_date})
                  if (data) {
                      console.log(data[0])
                  }
