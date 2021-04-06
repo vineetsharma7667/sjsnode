@@ -520,7 +520,7 @@ router.post('/StoreSection', upload.single('image'), async (req, res) => {
     router.post('/getSection', async (req, res) => {
         const {  school_id} = req.body
         try {
-            const data = await Section.find({school_id}).sort({class_name:1})
+            const data = await Section.find({school_id})
             if (data) {
                 console.log(data[0])
             }
@@ -1109,7 +1109,7 @@ router.post('/StoreStudent', upload.fields([{
       },{
         name: 'image4',maxCount: 1
       }]) ,async (req, res) => {
-        const {old_id,_id,unique_id,school_id,session,oldsession,date_of_admission,parent,admission_no,security_no,old_admission_no,aadhar_no,class_name,oldclass_name,section,oldsection,subjects,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,reg_no,roll_no,board_roll_no,last_school,balance,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details,account_no,father_name,mother_name,father_occu,father_designation,father_annual_income,mother_occu,mother_desgination,mother_annual_income,parent_address,parent_city,parent_state,parent_country,parent_phone,parent_mobile,gaurdian_name,gaurdian_occu,gaurdian_designation,gaurdian_annual_income,gaurdian_address,gaurdian_city,gaurdian_state,gaurdian_country,gaurdian_phone,gaurdian_mobile,religion } = req.body;
+        const {old_id,_id,unique_id,school_id,session,oldsession,date_of_admission,parent,admission_no,security_no,old_admission_no,aadhar_no,class_name,oldclass_name,section,oldsection,subjects,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,reg_no,roll_no,board_roll_no,last_school,balance,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details,account_no,father_name,mother_name,father_occu,father_designation,father_annual_income,mother_occu,mother_desgination,mother_annual_income,parent_address,parent_city,parent_state,parent_country, parent_per_address,parent_per_city,parent_per_state,parent_per_country,parent_phone,parent_mobile,gaurdian_name,gaurdian_occu,gaurdian_designation,gaurdian_annual_income,gaurdian_address,gaurdian_city,gaurdian_state,gaurdian_country,gaurdian_per_address,gaurdian_per_city,gaurdian_per_state,gaurdian_per_country,gaurdian_phone,gaurdian_mobile,religion } = req.body;
         console.log("Yes I Am In"+oldsession)
         var image,image2,image3,image4
         if(req.files.image != undefined){
@@ -1136,7 +1136,7 @@ router.post('/StoreStudent', upload.fields([{
         else{
         image4 = req.body.image4 
         }
-        Student.findByIdAndUpdate({_id:old_id},{image,image2,image3,image4,unique_id,school_id,session:oldsession,date_of_admission,parent,admission_no,security_no,old_admission_no,aadhar_no,class_name:oldclass_name,section:oldsection,subjects,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,reg_no,roll_no,board_roll_no,last_school,balance,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details,account_no,father_name,mother_name,father_occu,father_designation,father_annual_income,mother_occu,mother_desgination,mother_annual_income,parent_address,parent_city,parent_state,parent_country,parent_phone,parent_mobile,gaurdian_name,gaurdian_occu,gaurdian_designation,gaurdian_annual_income,gaurdian_address,gaurdian_city,gaurdian_state,gaurdian_country,gaurdian_phone,gaurdian_mobile,religion }, function(err, result){
+        Student.findByIdAndUpdate({_id:old_id},{image,image2,image3,image4,unique_id,school_id,session:oldsession,date_of_admission,parent,admission_no,security_no,old_admission_no,aadhar_no,class_name:oldclass_name,section:oldsection,subjects,is_start_from_first_class,last_class,category,house,name,sex,dob,nationality,reg_no,roll_no,board_roll_no,last_school,balance,fee_concession,bus_fare_concession,vehicle_no,is_teacher_ward,paid_upto_month,paid_upto_year,last_school_performance,is_full_free_ship,avail_transport,take_computer,no_exempt_security_deposit,ncc,no_exempt_registration,no_exempt_admission,is_repeater,other_details,misc_details,account_no,father_name,mother_name,father_occu,father_designation,father_annual_income,mother_occu,mother_desgination,mother_annual_income,parent_address,parent_city,parent_state,parent_country, parent_per_address,parent_per_city,parent_per_state,parent_per_country,parent_phone,parent_mobile,gaurdian_name,gaurdian_occu,gaurdian_designation,gaurdian_annual_income,gaurdian_address,gaurdian_city,gaurdian_state,gaurdian_country,gaurdian_per_address,gaurdian_per_city,gaurdian_per_state,gaurdian_per_country,gaurdian_phone,gaurdian_mobile,religion }, function(err, result){
             if(err){                
                 res.send(err)
             }
