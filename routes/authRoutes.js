@@ -1506,6 +1506,7 @@ router.post('/StoreStudent', upload.fields([{
                 //  res.send(docs)
             }).sort({ section: 1 });
         }else if(class_name !='' && section ==''){
+            
             const data = await Receipt.aggregate(
                 [
                     {$match: { class_name: { $in: [class_name] } }
@@ -1535,7 +1536,7 @@ router.post('/StoreStudent', upload.fields([{
                   
                 //     docs_id.push(mongoose.Types.ObjectId(item._id))
                 //  }) 
-
+                console.log(docs)
                 Receipt.find({
                     '_id': { $in: _id},session
                 }, function(err, docss){
