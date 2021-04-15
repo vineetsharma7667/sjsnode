@@ -1027,6 +1027,19 @@ router.post('/StoreStudent', upload.fields([{
             return res.status(422).send({ error: "error for fetching food data" })
         }
     })
+    router.post('/singleparentdataWithSession', async (req, res) => {
+        const { session,account_no} = req.body
+        console.log(req.body)
+        try {
+                await Academic.find({account_no,tc_status:'0',session}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+                console.log("gfgfdgfdgfdgsadsadadsa",data)
+                res.send(data)
+            })
+        }
+        catch (err) {
+            return res.status(422).send({ error: "error for fetching food data" })
+        }
+    })
     router.post('/getStudentForUpgrade', async (req, res) => {
         const { session, class_name} = req.body
         console.log(req.body)
@@ -1071,6 +1084,21 @@ router.post('/StoreStudent', upload.fields([{
         console.log(req.body)
         try {
              await Academic.find({session,admission_no,school_id,tc_status:0}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+                console.log("gfgfdgfdgfdgsadsadadsa",data)
+                res.send(data)
+            })
+        }
+        catch (err) {
+            return res.status(422).send({ error: "error for fetching food data" })
+        }
+    })
+
+      router.post('/GetStudentWithRange', async (req, res) => {
+        const { session, FromAdmissionNo,ToAdmissionNo} = req.body
+        console.log(req.body)
+        try {
+             await Academic.find({session,tc_status:"0",admission_no : {$gte : FromAdmissionNo},
+             admission_no : {$lte : ToAdmissionNo}}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
                 console.log("gfgfdgfdgfdgsadsadadsa",data)
                 res.send(data)
             })
