@@ -1765,14 +1765,14 @@ router.post('/StoreStudent', upload.fields([{
         res.send({ res: "Deleted Sucessfully" })
     })
 
-    router.post('/VoucherByDate', async (req, res) => {
+    router.post('/SuspiciousVoucherByDate', async (req, res) => {
         console.log('yes im in' + req.body.Bank)
         const { Bank,VoucherDate } = req.body;
         const receipt_date = VoucherDate
         const bank = Bank
         if(Bank ==""){
             try {
-                const data = await Receipt.find({receipt_date})
+                const data = await SuspensionalFee.find({receipt_date})
                  if (data) {
                      console.log(data[0])
                  }
@@ -1783,7 +1783,7 @@ router.post('/StoreStudent', upload.fields([{
              }
         }else{
             try {
-                const data = await Receipt.find({ bank,receipt_date })
+                const data = await SuspensionalFee.find({ bank,receipt_date })
                  if (data) {
                      console.log(data[0])
                  }
