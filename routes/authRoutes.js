@@ -1765,6 +1765,36 @@ router.post('/StoreStudent', upload.fields([{
         res.send({ res: "Deleted Sucessfully" })
     })
 
+    router.post('/VoucherByDate', async (req, res) => {
+        console.log('yes im in' + req.body.Bank)
+        const { Bank,VoucherDate } = req.body;
+        const receipt_date = VoucherDate
+        const bank = Bank
+        if(Bank ==""){
+            try {
+                const data = await Receipt.find({receipt_date})
+                 if (data) {
+                     console.log(data[0])
+                 }
+                 res.send(data)
+             }
+             catch (err) {
+                 return res.status(422).send({ error: "error for fetching profile data" })
+             }
+        }else{
+            try {
+                const data = await Receipt.find({ bank,receipt_date })
+                 if (data) {
+                     console.log(data[0])
+                 }
+                 res.send(data)
+             }
+             catch (err) {
+                 return res.status(422).send({ error: "error for fetching profile data" })
+             }
+        }
+       
+    })
     router.post('/SuspiciousVoucherByDate', async (req, res) => {
         console.log('yes im in' + req.body.Bank)
         const { Bank,VoucherDate } = req.body;
