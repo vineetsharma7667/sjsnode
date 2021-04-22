@@ -1536,7 +1536,8 @@ router.post('/StoreStudent', upload.fields([{
            var alldata=  Receipt.find({
                 '_id': { $in: _id},last_fee_date: { 
                             $lt: defaulter_month
-                        },session
+                        }
+                        // *********** remove session from here example (  },session  )
             }, function(err, docs){
                 // var docs_id=[];
                 // docs.map((item,index)=>{
@@ -1549,7 +1550,8 @@ router.post('/StoreStudent', upload.fields([{
                 //     $lte: 0
                 // }
                 Receipt.find({
-                    '_id': { $in: _id},session
+                    '_id': { $in: _id}
+                    // *********** remove session from here example (  },session  )
                 }, function(err, docss){
                     //  console.log(data);
                      var array3 = docss.filter(function(obj) { return docs.indexOf(obj) == -1; });
@@ -1559,7 +1561,7 @@ router.post('/StoreStudent', upload.fields([{
                 //  res.send(docs)
             }).sort({ section: 1 });
         }else if(class_name !='' && section ==''){
-            
+            console.log("yahi wala hai")
             const data = await Receipt.aggregate(
                 [
                     {$match: { class_name: { $in: [class_name] } }
@@ -1582,7 +1584,8 @@ router.post('/StoreStudent', upload.fields([{
            var alldata=  Receipt.find({
                 '_id': { $in: _id},last_fee_date: { 
                             $lt: defaulter_month
-                        },session
+                        }
+                        // *********** remove session from here example (  },session  )
             }, function(err, docs){
                 // var docs_id=[];
                 // docs.map((item,index)=>{
@@ -1591,7 +1594,8 @@ router.post('/StoreStudent', upload.fields([{
                 //  }) 
                 console.log(docs)
                 Receipt.find({
-                    '_id': { $in: _id},session
+                    '_id': { $in: _id}
+                    // *********** remove session from here example (  },session  )
                 }, function(err, docss){
                     //  console.log(data);
                      var array3 = docss.filter(function(obj) { return docs.indexOf(obj) == -1; });
@@ -1624,10 +1628,12 @@ router.post('/StoreStudent', upload.fields([{
            var alldata=  Receipt.find({
                 '_id': { $in: _id},last_fee_date: { 
                             $lt: defaulter_month
-                        },session
+                        }
+                        // *********** remove session from here example (  },session  )
             }, function(err, docs){
                 Receipt.find({
-                    '_id': { $in: _id},session
+                    '_id': { $in: _id}
+                    // *********** remove session from here example (  },session  )
                 },function(err, docss){
                     //  console.log(data);
                      var array3 = docss.filter(function(obj) { return docs.indexOf(obj) == -1; });
@@ -1764,7 +1770,6 @@ router.post('/StoreStudent', upload.fields([{
         Receipt.findByIdAndRemove(_id).exec();
         res.send({ res: "Deleted Sucessfully" })
     })
-
     router.post('/VoucherByDate', async (req, res) => {
         console.log('yes im in' + req.body.Bank)
         const { Bank,VoucherDate } = req.body;
