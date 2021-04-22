@@ -2001,6 +2001,5 @@ router.post('/StoreFine', upload.single('image'), async (req, res) => {
         })
     })
     // end Fine routes
-    // new commit
 module.exports = router
 
