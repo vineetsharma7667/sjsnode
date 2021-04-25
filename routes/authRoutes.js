@@ -1424,7 +1424,7 @@ router.post('/StoreStudent', upload.fields([{
         }
     })
     router.post('/FeesClasswise', async (req, res) => {
-        console.log('yes im in' + req.body.section)
+        console.log('yes im in' + req.body.class_name)
         const { class_name,session } = req.body;
         try {
            const data = await FeeStructure.find({ class_name,session })
@@ -1584,7 +1584,7 @@ router.post('/StoreStudent', upload.fields([{
            var alldata=  Receipt.find({
                 '_id': { $in: _id},last_fee_date: { 
                             $lt: defaulter_month
-                        }
+                        },session
                         // *********** remove session from here example (  },session  )
             }, function(err, docs){
                 // var docs_id=[];
@@ -1594,7 +1594,7 @@ router.post('/StoreStudent', upload.fields([{
                 //  }) 
                 console.log(docs)
                 Receipt.find({
-                    '_id': { $in: _id}
+                    '_id': { $in: _id},session
                     // *********** remove session from here example (  },session  )
                 }, function(err, docss){
                     //  console.log(data);
@@ -1710,6 +1710,56 @@ router.post('/StoreStudent', upload.fields([{
     
        
     })
+    router.post('/getFeeSummary', async (req, res) => {
+        console.log('yes im in fee summary' + req.body.summaryFrom)
+        const { bank,summaryFrom,summaryTo} = req.body;
+        if(bank != ""){
+            try {
+                const dataa = await Receipt.find({receipt_date: {
+                    $gte: summaryFrom,
+                    $lte: summaryTo
+                },bank}).sort({ receipt_date: 1 }).exec((err,data)=>{
+                    console.log("gfgfdgfdgfdgsadsadadsa",data)
+                    
+                    if(data !=null){
+                    res.send(data)
+                    }else{
+                    res.send([undefined]) 
+                    }
+                    console.log("vineet"+data)
+                })
+               
+                 console.log("vineet"+dataa)
+                //  res.send(dataa)
+             }
+             catch (err) {
+                 return res.status(422).send({ error: "error for fetching Receipt data" })
+             }
+            }else{
+                try {
+                    const dataa = await Receipt.find({receipt_date: {
+                        $gte: summaryFrom,
+                        $lte: summaryTo
+                    }}).sort({ receipt_date: 1 }).exec((err,data)=>{
+                        console.log("gfgfdgfdgfdgsadsadadsa",data)
+                        
+                        if(data !=null){
+                        res.send(data)
+                        }else{
+                        res.send([undefined]) 
+                        }
+                        console.log("vineet"+data)
+                    })
+                   
+                     console.log("vineet"+dataa)
+                    //  res.send(dataa)
+                 }
+                 catch (err) {
+                     return res.status(422).send({ error: "error for fetching Receipt data" })
+                 }
+             }
+    })
+    
     router.post('/getadmission_no', async (req, res) => {
         console.log('yes im in' + req.body.session)
         const { session } = req.body;
@@ -1753,9 +1803,9 @@ router.post('/StoreStudent', upload.fields([{
     //     }
     // })
     router.patch('/UpdateBalance',upload.single('image'),async (req, res) => {    
-        const { _id,balance } = req.body;
+        const { _id,balance,paid_upto_month } = req.body;
         console.log(req.body)
-        Student.findByIdAndUpdate({_id},{balance}, function(err, result){
+        Student.findByIdAndUpdate({_id},{balance,paid_upto_month}, function(err, result){
             if(err){
                 res.send(err)
             }
