@@ -778,6 +778,8 @@ router.post('/StoreSubject', upload.single('image'), async (req, res) => {
      
     }
     })
+
+    
     router.get('/getSubjects', async (req, res) => {
         try {
             const data = await Subject.find()
