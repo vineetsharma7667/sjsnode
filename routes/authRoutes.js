@@ -585,18 +585,6 @@ router.post('/StoreCategory', upload.single('image'), async (req, res) => {
             return res.status(422).send({ error: "error for fetching food data" })
         }
     })
-    router.put('/updateCategory', upload.single('image') ,async (req, res) => {
-        const { _id,category,description } = req.body;
-        // const image = req.file.path
-        Category.findByIdAndUpdate({_id},{  category,description }, function(err, result){
-            if(err){
-                res.send(err)
-            }
-            else{
-                res.send(result)
-            }
-        })
-    })
     router.delete('/deleteCategory', (req, res) => {
         const { _id } = req.body
         console.log(_id)
@@ -1496,7 +1484,7 @@ router.post('/StoreStudent', upload.fields([{
         console.log('yes im in' + req.body.admission_no)
         const { admission_no } = req.body;
         try {
-           const data = await Receipt.find({ admission_no })
+           const data = await Receipt.find({ admission_no }).sort({last_fee_date:1})
             if (data) {
                 console.log(data[0])
             }
@@ -1921,7 +1909,7 @@ router.post('/StoreStudent', upload.fields([{
         const bank = Bank
         if(Bank ==""){
             try {
-                const data = await Receipt.find({receipt_date})
+                const data = await Receipt.find({receipt_date}).sort({receipt_no:1})
                  if (data) {
                      console.log(data[0])
                  }
@@ -1932,7 +1920,7 @@ router.post('/StoreStudent', upload.fields([{
              }
         }else{
             try {
-                const data = await Receipt.find({ bank,receipt_date })
+                const data = await Receipt.find({ bank,receipt_date }).sort({receipt_no:1})
                  if (data) {
                      console.log(data[0])
                  }
