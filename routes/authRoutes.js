@@ -1021,7 +1021,7 @@ router.post('/StoreStudent', upload.fields([{
         const { session,account_no} = req.body
         console.log(req.body)
         try {
-                await Academic.find({account_no,tc_status:'0',session}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+                await Academic.find({account_no,session}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
                 console.log("gfgfdgfdgfdgsadsadadsa",data)
                 res.send(data)
             })
