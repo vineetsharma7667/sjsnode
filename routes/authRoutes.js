@@ -28,6 +28,7 @@ const Receipt = mongoose.model('Receipt')
 const Bank = mongoose.model('Bank')
 const SuspensionalFee = mongoose.model('SuspensionalFee')
 const TransferCertificate = mongoose.model('TransferCertificate')
+const DefaulterMaker = mongoose.model('DefaulterMaker')
 
 
 
@@ -978,6 +979,9 @@ router.post('/StoreStudent', upload.fields([{
             return res.status(422).send({ error: "error for fetching food data" })
         }
     })
+
+    
+    
     router.post('/getStudentAccount_no', async (req, res) => {
         // const { session,school_id} = req.body
         console.log(req.body+"account no")
@@ -1312,6 +1316,7 @@ router.post('/StoreStudent', upload.fields([{
                 console.log(err.message.toString().includes('duplicate'))  
             }
         })
+      
         router.post('/DeleteUpgradeStudent', upload.single('image'),async (req, res) => {
             const {IdArray} = req.body;
                 Academic.deleteMany(
@@ -2046,5 +2051,41 @@ router.post('/StoreFine', upload.single('image'), async (req, res) => {
         })
     })
     // end Fine routes
+
+    // Defaulter Maker Routes
+    router.post('/ImportallDefaulter',upload.single('image'),async (req, res) => {
+        console.log("yes im in");
+        
+        const {AllDefaulterData} = req.body;
+        console.log(AllDefaulterData.length);
+        // console.log("yes im in"+ AllDefaulterData);
+        try {
+          const  AllDefaulterDataa=   DefaulterMaker.insertMany(JSON.parse(AllDefaulterData)).then(result=>{ 
+            console.log("Data inserted")  // Success 
+            if (AllDefaulterDataa) {
+                res.send(AllDefaulterDataa)
+             }
+            })
+        } catch (err) {
+            console.log(err.message.toString().includes('duplicate'))  
+        }
+    })
+
+    router.post('/GetDefaulterMoneySingleStudent', async (req, res) => {
+        const { session,admission_no} = req.body
+        console.log(req.body)
+        try {
+            const data = await DefaulterMaker.find({admission_no,session})
+            if (data) {
+                console.log(data[0])
+            }
+            console.log(data[0])
+            res.send(data[0])
+        }
+        catch (err) {
+            return res.status(422).send({ error: "error for fetching food data" })
+        }
+    })
+    // End defaulter Makers Routes
 module.exports = router
 
