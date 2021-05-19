@@ -28,6 +28,13 @@ require('./models/SuspensionalFee');
 require('./models/TransferCertificate');
 require('./models/DefaulterMaker');
 
+// Employess routes
+require('./models/Employee');
+require('./models/Designation');
+require('./models/PayType');
+require('./models/PayCategory');
+require('./models/PayScaleType');
+require('./models/PayScale');
 
 const requireToken= require('./middleware/requireToken');
 app.use(bodyParser.json());

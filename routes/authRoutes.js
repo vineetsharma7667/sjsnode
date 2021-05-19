@@ -30,6 +30,17 @@ const SuspensionalFee = mongoose.model('SuspensionalFee')
 const TransferCertificate = mongoose.model('TransferCertificate')
 const DefaulterMaker = mongoose.model('DefaulterMaker')
 
+// Employeee Routes
+const Employee = mongoose.model('Employee')
+const PayType = mongoose.model('PayType')
+const PayCategory = mongoose.model('PayCategory')
+const Designation = mongoose.model('Designation')
+const PayScaleType = mongoose.model('PayScaleType')
+const PayScaleTABLE = mongoose.model('PayScale')
+
+
+
+
 
 
 
@@ -150,7 +161,19 @@ router.post('/StoreTcDetails', upload.single('image'), async (req, res) => {
         }
     })
 
-
+    router.put('/UpdateTcData', upload.single('image') ,async (req, res) => {
+        console.log("Yes I Am In")
+        const { _id,date_of_tc,date_of_aplication,name,account_no,parents,class_name,section,category,nationality,date_of_admission,dob,house,address,security_deposit,return_mode,bank,tc_no,cheque_no,reason,working_days,present_days,admission_no,is_promoted,promoted_in,result,last_school,result_remark,concession,concession_remark,games_remark,other_remark,conduct,session,tc_status,student_id,academic_id,left_on} = req.body;
+        // const image = req.file.path
+        TransferCertificate.findByIdAndUpdate({_id},{date_of_tc,date_of_aplication,name,account_no,parents,class_name,section,category,nationality,date_of_admission,dob,house,address,security_deposit,return_mode,bank,tc_no,cheque_no,reason,working_days,present_days,admission_no,is_promoted,promoted_in,result,last_school,result_remark,concession,concession_remark,games_remark,other_remark,conduct,session,tc_status,student_id,academic_id,left_on}, function(err, result){
+            if(err){
+                res.send(err)
+            }
+            else{
+                res.send(result)
+            }
+        })
+    })
     router.post('/RecoverFromTc', upload.single('image'), async (req, res) => {
         console.log("yes i am in")
         const { tc_status,_id,academic_id,student_id} = req.body;
@@ -202,9 +225,9 @@ router.post('/StoreSuspensionalVoucher', upload.single('image'), async (req, res
     try {
         const data = await SuspensionalFee.find()
         if (data) {
-            console.log(data[0])
+            
         }
-        console.log(data[0])
+        
         res.send(data)
     }
     catch (err) {
@@ -257,9 +280,9 @@ router.get('/getCategory', async (req, res) => {
     try {
         const data = await FeeCategory.find()
         if (data) {
-            console.log(data[0])
+            
         }
-        console.log(data[0])
+        
         res.send(data)
     }
     catch (err) {
@@ -292,9 +315,9 @@ router.post('/StoreFeeSubCatogory', upload.single('image'), async (req, res) => 
         try {
             const data = await FeeSubCategory.find()
             if (data) {
-                console.log(data[0])
+                
             }
-            console.log(data[0])
+            
             res.send(data)
         }
         catch (err) {
@@ -348,9 +371,9 @@ router.post('/StoreWaiverCategory', upload.single('image'), async (req, res) => 
         try {
             const data = await WaiverCategory.find()
             if (data) {
-                console.log(data[0])
+                
             }
-            console.log(data[0])
+            
             res.send(data)
         }
         catch (err) {
@@ -409,9 +432,9 @@ router.post('/StoreSession', upload.single('image'), async (req, res) => {
         try {
             const data = await Session.find({school_id})
             if (data) {
-                console.log(data[0])
+                
             }
-            console.log(data[0])
+            
             res.send(data)
         }
         catch (err) {
@@ -457,9 +480,9 @@ router.post('/StoreClass', upload.single('image'),async (req, res) => {
         try {
             const data = await Class.find()
             if (data) {
-                console.log(data[0])
+                
             }
-            console.log(data[0])
+            
             res.send(data)
         }
         catch (err) {
@@ -523,9 +546,9 @@ router.post('/StoreSection', upload.single('image'), async (req, res) => {
         try {
             const data = await Section.find({school_id})
             if (data) {
-                console.log(data[0])
+                
             }
-            console.log(data[0])
+            
             res.send(data)
         }
         catch (err) {
@@ -577,9 +600,9 @@ router.post('/StoreCategory', upload.single('image'), async (req, res) => {
         try {
             const data = await Category.find()
             if (data) {
-                console.log(data[0])
+                
             }
-            console.log(data[0])
+            
             res.send(data)
         }
         catch (err) {
@@ -620,9 +643,9 @@ router.post('/StoreVehicle', upload.single('image'), async (req, res) => {
         try {
             const data = await Vehicle.find()
             if (data) {
-                console.log(data[0])
+                
             }
-            console.log(data[0])
+            
             res.send(data)
         }
         catch (err) {
@@ -674,9 +697,9 @@ router.post('/StoreVehicleType', upload.single('image'), async (req, res) => {
         try {
             const data = await VehicleType.find()
             if (data) {
-                console.log(data[0])
+                
             }
-            console.log(data[0])
+            
             res.send(data)
         }
         catch (err) {
@@ -728,9 +751,9 @@ router.post('/getBankData', async (req, res) => {
 try {
     const data = await Bank.find({school_id})
     if (data) {
-        console.log(data[0])
+        
     }
-    console.log(data[0])
+    
     res.send(data)
 }
 catch (err) {
@@ -785,9 +808,9 @@ router.post('/StoreSubject', upload.single('image'), async (req, res) => {
         try {
             const data = await Subject.find()
             if (data) {
-                console.log(data[0])
+                
             }
-            console.log(data[0])
+            
             res.send(data)
         }
         catch (err) {
@@ -840,9 +863,9 @@ router.post('/StoreHouse', upload.single('image'), async (req, res) => {
         try {
             const data = await House.find()
             if (data) {
-                console.log(data[0])
+                
             }
-            console.log(data[0])
+            
             res.send(data)
         }
         catch (err) {
@@ -895,9 +918,9 @@ router.post('/StoreParent', upload.single('image'), async (req, res) => {
         try {
             const data = await Parent.find()
             if (data) {
-                console.log(data[0])
+                
             }
-            console.log(data[0])
+            
             res.send(data)
         }
         catch (err) {
@@ -1120,7 +1143,7 @@ router.post('/StoreStudent', upload.fields([{
     //     try {
     //        const data = await Student.find({ admission_no })
     //         if (data) {
-    //             console.log(data[0])
+    //             
     //         }
             
     //         res.send(data)
@@ -1392,9 +1415,9 @@ router.post('/StoreStudent', upload.fields([{
         try {
             const data = await FeeStructure.find({school_id,session})
             if (data) {
-                console.log(data[0])
+                
             }
-            console.log(data[0])
+            
             res.send(data)
         }
         catch (err) {
@@ -1409,7 +1432,7 @@ router.post('/StoreStudent', upload.fields([{
         try {
            const data = await FeeStructure.find({ class_name })
             if (data) {
-                console.log(data[0])
+                
             }
             
             res.send(data)
@@ -1424,7 +1447,7 @@ router.post('/StoreStudent', upload.fields([{
         try {
            const data = await FeeStructure.find({ class_name,session })
             if (data) {
-                console.log(data[0])
+                
             }
             res.send(data)
         }
@@ -1493,7 +1516,7 @@ router.post('/StoreStudent', upload.fields([{
         try {
            const data = await Receipt.find({ admission_no }).sort({last_fee_date:1})
             if (data) {
-                console.log(data[0])
+                
             }
             res.send(data)
         }
@@ -1649,7 +1672,7 @@ router.post('/StoreStudent', upload.fields([{
             //         $lt: new Date(defaulter_month)
             //     } })
             //     if (data) {
-            //         console.log(data[0])
+            //         
             //     }
             //     res.send(data)
             // } else{
@@ -1657,7 +1680,7 @@ router.post('/StoreStudent', upload.fields([{
             //         $lt: new Date(defaulter_month)
             //     },class_name })
             //     if (data) {
-            //         console.log(data[0])
+            //         
             //     }
             //     res.send(data)
             // }
@@ -1671,9 +1694,9 @@ router.post('/StoreStudent', upload.fields([{
         try {
             const data = await Receipt.find()
             if (data) {
-                console.log(data[0])
+                
             }
-            console.log(data[0])
+            
             res.send(data)
         }
         catch (err) {
@@ -1787,9 +1810,9 @@ router.post('/StoreStudent', upload.fields([{
     //         const data = await Receipt.find({"receipt_date":{ $gte:summaryFrom, $lt:summaryTo }
     //     })
     //         if (data) {
-    //             console.log(data[0])
+    //             
     //         }
-    //         console.log(data[0])
+    //         
     //         res.send(data)
     //     }
     //     catch (err) {
@@ -1824,7 +1847,7 @@ router.post('/StoreStudent', upload.fields([{
             try {
                 const data = await Receipt.find({receipt_date})
                  if (data) {
-                     console.log(data[0])
+                     
                  }
                  res.send(data)
              }
@@ -1835,7 +1858,7 @@ router.post('/StoreStudent', upload.fields([{
             try {
                 const data = await Receipt.find({ bank,receipt_date })
                  if (data) {
-                     console.log(data[0])
+                     
                  }
                  res.send(data)
              }
@@ -1854,7 +1877,7 @@ router.post('/StoreStudent', upload.fields([{
             try {
                 const data = await SuspensionalFee.find({receipt_date})
                  if (data) {
-                     console.log(data[0])
+                     
                  }
                  res.send(data)
              }
@@ -1865,7 +1888,7 @@ router.post('/StoreStudent', upload.fields([{
             try {
                 const data = await SuspensionalFee.find({ bank,receipt_date })
                  if (data) {
-                     console.log(data[0])
+                     
                  }
                  res.send(data)
              }
@@ -1887,7 +1910,7 @@ router.post('/StoreStudent', upload.fields([{
             try {
                 const data = await Receipt.find({receipt_date})
                  if (data) {
-                     console.log(data[0])
+                     
                  }
                  res.send(data)
              }
@@ -1898,7 +1921,7 @@ router.post('/StoreStudent', upload.fields([{
             try {
                 const data = await Receipt.find({ bank,receipt_date })
                  if (data) {
-                     console.log(data[0])
+                     
                  }
                  res.send(data)
              }
@@ -1918,7 +1941,7 @@ router.post('/StoreStudent', upload.fields([{
             try {
                 const data = await Receipt.find({receipt_date}).sort({receipt_no:1})
                  if (data) {
-                     console.log(data[0])
+                     
                  }
                  res.send(data)
              }
@@ -1929,7 +1952,7 @@ router.post('/StoreStudent', upload.fields([{
             try {
                 const data = await Receipt.find({ bank,receipt_date }).sort({receipt_no:1})
                  if (data) {
-                     console.log(data[0])
+                     
                  }
                  res.send(data)
              }
@@ -1948,7 +1971,7 @@ router.post('/StoreStudent', upload.fields([{
             try {
                 const data = await SuspensionalFee.find({receipt_date})
                  if (data) {
-                     console.log(data[0])
+                     
                  }
                  res.send(data)
              }
@@ -1960,7 +1983,7 @@ router.post('/StoreStudent', upload.fields([{
             try {
                 const data = await SuspensionalFee.find({ bank,receipt_date})
                  if (data) {
-                     console.log(data[0])
+                     
                  }
                  res.send(data)
              }
@@ -1979,7 +2002,7 @@ router.post('/StoreStudent', upload.fields([{
             try {
                 const data = await Receipt.find({receipt_date,class_name})
                  if (data) {
-                     console.log(data[0])
+                     
                  }
                  res.send(data)
              }
@@ -1991,7 +2014,7 @@ router.post('/StoreStudent', upload.fields([{
             try {
                 const data = await Receipt.find({ bank,receipt_date,class_name })
                  if (data) {
-                     console.log(data[0])
+                     
                  }
                  res.send(data)
              }
@@ -2028,9 +2051,9 @@ router.post('/StoreFine', upload.single('image'), async (req, res) => {
         try {
             const data = await Fine.find()
             if (data) {
-                console.log(data[0])
+                
             }
-            console.log(data[0])
+            
             res.send(data)
         }
         catch (err) {
@@ -2077,9 +2100,9 @@ router.post('/StoreFine', upload.single('image'), async (req, res) => {
         try {
             const data = await DefaulterMaker.find({admission_no,session})
             if (data) {
-                console.log(data[0])
+                
             }
-            console.log(data[0])
+            
             res.send(data[0])
         }
         catch (err) {
@@ -2087,5 +2110,272 @@ router.post('/StoreFine', upload.single('image'), async (req, res) => {
         }
     })
     // End defaulter Makers Routes
+
+
+
+
+
+    // ***************************************************
+    // *************** Employees Routes ******************
+
+
+    // Employe routes
+router.post('/StoreEmployee', upload.single('image'), async (req, res) => {
+    console.log(req.body);
+    const {name,dob,doa,sex,designation,pay_level} = req.body;
+    try {
+        const EmployeeData = new Employee({name,dob,doa,sex,designation,pay_level})
+        await EmployeeData.save();
+        if (EmployeeData) {
+            console.log("EmployeeData")
+        }
+        else {
+            console.log("data is not stored")
+        }
+        console.log(EmployeeData);
+        res.send(EmployeeData)
+    } catch (err) {
+        return res.status(422).send(err.message)
+     
+    }
+})
+router.post('/getEmployees', async (req, res) => {
+    const { school_id} = req.body
+try {
+    await Employee.find().populate('pay_level').sort({ _id: -1 }).exec((err, data) => {
+        console.log("gfgfdgfdgfdgsadsadadsa", data)
+        res.send(data)
+    })
+    
+}
+catch (err) {
+    return res.status(422).send({ error: "error for fetching food data" })
+}
+
+})
+
+
+
+// PayType routes
+
+
+router.post('/StorePayType', upload.single('image'), async (req, res) => {
+    console.log(req.body);
+    const {name,category,description} = req.body;
+    try {
+        const PayTypeData = new PayType({name,category,description})
+        await PayTypeData.save();
+        if (PayTypeData) {
+            console.log("PayTypeData")
+        }
+        else {
+            console.log("data is not stored")
+        }
+        console.log(PayTypeData);
+        res.send(PayTypeData)
+    } catch (err) {
+        return res.status(422).send(err.message)
+     
+    }
+})
+router.post('/getPayType', async (req, res) => {
+    const { school_id} = req.body
+try {
+    const data = await PayType.find({})
+    if (data) {
+        
+    }
+    
+    res.send(data)
+}
+catch (err) {
+    return res.status(422).send({ error: "error for fetching food data" })
+}
+
+})
+// end Pay Type Routes
+
+
+// Pay Ctegory routes
+
+
+router.post('/StorePayCategory', upload.single('image'), async (req, res) => {
+    console.log(req.body);
+    const {name,description} = req.body;
+    try {
+        const PaycatData = new PayCategory({name,description})
+        await PaycatData.save();
+        if (PaycatData) {
+            console.log("PaycatData")
+        }
+        else {
+            console.log("data is not stored")
+        }
+        console.log(PaycatData);
+        res.send(PaycatData)
+    } catch (err) {
+        return res.status(422).send(err.message)
+     
+    }
+})
+router.post('/getPayCategoty', async (req, res) => {
+    const { school_id} = req.body
+try {
+    const data = await PayCategory.find({})
+    if (data) {
+        
+    }
+    
+    res.send(data)
+}
+catch (err) {
+    return res.status(422).send({ error: "error for fetching food data" })
+}
+
+})
+// end Pay Category Routes
+
+
+// Pay Designation routes
+
+
+router.post('/StoreEmployeeDesignation', upload.single('image'), async (req, res) => {
+    console.log(req.body);
+    const {name,description} = req.body;
+    try {
+        const DesignationData = new Designation({name,description})
+        await DesignationData.save();
+        if (DesignationData) {
+            console.log("DesignationData")
+        }
+        else {
+            console.log("data is not stored")
+        }
+        console.log(DesignationData);
+        res.send(DesignationData)
+    } catch (err) {
+        return res.status(422).send(err.message)
+     
+    }
+})
+router.post('/getDesignation', async (req, res) => {
+    const { school_id} = req.body
+try {
+    const data = await Designation.find({})
+    if (data) {
+        
+    }
+    
+    res.send(data)
+}
+catch (err) {
+    return res.status(422).send({ error: "error for fetching food data" })
+}
+
+})
+// end Pay Designation Routes
+
+
+// Pay Scale Type routes
+
+
+router.post('/StorePayScaleType', upload.single('image'), async (req, res) => {
+    console.log(req.body);
+    const {name,description} = req.body;
+    try {
+        const PayScaleTypeData = new PayScaleType({name,description})
+        await PayScaleTypeData.save();
+        if (PayScaleTypeData) {
+            console.log("PayScaleTypeData")
+        }
+        else {
+            console.log("data is not stored")
+        }
+        console.log(PayScaleTypeData);
+        res.send(PayScaleTypeData)
+    } catch (err) {
+        return res.status(422).send(err.message)
+     
+    }
+})
+router.post('/getPayScaleType', async (req, res) => {
+    const { school_id} = req.body
+try {
+    const data = await PayScaleType.find({})
+    if (data) {
+        
+    }
+    
+    res.send(data)
+}
+catch (err) {
+    return res.status(422).send({ error: "error for fetching food data" })
+}
+})
+// end Pay Scale Type Routes
+
+
+// Pay Scale routes
+
+
+router.post('/StorePayScale', upload.single('image'), async (req, res) => {
+    console.log(req.body);
+    const {PayScaleName,PayScale} = req.body;
+    try {
+        const PayScaleData = new PayScaleTABLE({PayScaleName,PayScale})
+        await PayScaleData.save();
+        if (PayScaleData) {
+            console.log("PayScaleData")
+        }
+        else {
+            console.log("data is not stored")
+        }
+        console.log(PayScaleData);
+        res.send(PayScaleData)
+    } catch (err) {
+        return res.status(422).send(err.message)
+     
+    }
+})
+router.post('/getPayScale', async (req, res) => {
+    const { school_id} = req.body
+try {
+    const data = await PayScaleTABLE.find({})
+    if (data) {
+        
+    }
+    
+    res.send(data)
+}
+catch (err) {
+    return res.status(422).send({ error: "error for fetching food data" })
+}
+})
+
+router.put('/UpdatePayScale', upload.single('image'), async (req, res) => {
+    console.log(req.body);
+    const {_id,PayScaleName,PayScale} = req.body;
+    try {
+        PayScaleTABLE.findByIdAndUpdate({_id},{ PayScaleName,PayScale }, function(err, result){
+            if(err){
+                res.send(err)
+            }
+            else{
+                res.send(result)
+            }
+        })
+    } catch (err) {
+        return res.status(422).send(err.message)
+     
+    }
+})
+
+router.delete('/DeletePayScale', (req, res) => {
+    const { _id } = req.body
+    console.log(_id)
+    PayScaleTABLE.findByIdAndRemove(_id).exec();
+    res.send({ res: "Deleted Sucessfully" })
+})
+// end Pay Scale Routes
 module.exports = router
 
