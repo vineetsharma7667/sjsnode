@@ -2054,6 +2054,7 @@ router.post('/StoreStudent', upload.fields([{
         }
        
     })
+    
     router.post('/VoucherByClass', async (req, res) => {
         console.log('yes im in' + req.body.Bank)
         const { Bank,VoucherDate,class_name} = req.body;
