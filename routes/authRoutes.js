@@ -1270,8 +1270,69 @@ router.post('/StoreStudent', upload.fields([{
         }
        
     })
+    router.post('/StudentStrenghtForSecurityClassWise', async (req, res) => {
+        console.log('yes im in' + req.body.class_name)
+        const {session,section,class_name } = req.body;
+         if(class_name == ""){
+            try {
+                await Academic.find({session}).populate('student').sort({ class_name: 1 }).exec((err,data)=>{
+                    console.log("gfgfdgfdgfdgsadsadadsa",data)
+                    res.send(data)
+                })
+             }
+             catch (err) {
+                 return res.status(422).send({ error: "error for fetching profile data" })
+             }
+        }
+        else if(section ==""){
+            try {
+                if(class_name!="PRE-NUR"){
+                await Academic.find({session,class_name}).populate('student').sort({ section: 1 }).exec((err,data)=>{
+                    console.log("gfgfdgfdgfdgsadsadadsa",data)
+                    res.send(data)
+                })
+                }else{
+                    await Academic.find({session,class_name,section}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+                        console.log("gfgfdgfdgfdgsadsadadsa",data)
+                        res.send(data)
+                    })
+                }
+             }
+             catch (err) {
+                 return res.status(422).send({ error: "error for fetching profile data" })
+            }
+        }
+        else{
+            console.log("yes ia am in vineet")
+            try {
+                await Academic.find({session,class_name,section}).populate('student').sort({ section: -1 }).exec((err,data)=>{
+                    console.log("gfgfdgfdgfdgsadsadadsa",data)
+                    res.send(data)
+                })
+             }
+             catch (err) {
+                 return res.status(422).send({ error: "error for fetching profile data" })
+             }
+        }
+       
+    })
 
 
+    router.post('/StudentStrenghtForSecurityALL', async (req, res) => {
+        console.log('yes im in' + req.body.class_name)
+        const { session} = req.body;
+
+            try {
+                await Student.find().sort({ admission_no: 1 }).exec((err,data)=>{
+                    console.log("gfgfdgfdgfdgsadsadadsa",data)
+                    res.send(data)
+                })
+             }
+             catch (err) {
+                 return res.status(422).send({ error: "error for fetching profile data" })
+             }
+       
+    })
 
     router.delete('/deleteFeeStructure', (req, res) => {
         const { _id } = req.body
@@ -2107,6 +2168,26 @@ router.post('/StoreFine', upload.single('image'), async (req, res) => {
         }
         catch (err) {
             return res.status(422).send({ error: "error for fetching food data" })
+        }
+    })
+   
+    router.put('/UpdateSpeceficPreviousSessionAmount', upload.single('image'), async (req, res) => {
+        console.log(req.body);
+        const {_id,TotalPreviousBalance,name} = req.body;
+        try {
+            if(name !=""){
+            DefaulterMaker.findByIdAndUpdate({_id},{ TotalPreviousBalance }, function(err, result){
+                if(err){
+                    res.send(err)
+                }
+                else{
+                    res.send(result)
+                }
+            })
+        }
+        } catch (err) {
+            return res.status(422).send(err.message)
+         
         }
     })
     // End defaulter Makers Routes
