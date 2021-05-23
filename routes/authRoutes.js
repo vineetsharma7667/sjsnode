@@ -234,6 +234,22 @@ router.post('/StoreSuspensionalVoucher', upload.single('image'), async (req, res
         return res.status(422).send({ error: "error for fetching food data" })
     }
     })
+    router.post('/getSuspensionalFeeWithAdmissionNoZero', async (req, res) => {
+        const { admission_no,session} = req.body
+    try {
+        const data = await Receipt.find({admission_no,session})
+        if (data) {
+            
+        }
+        
+        res.send(data)
+    }
+    catch (err) {
+        return res.status(422).send({ error: "error for fetching food data" })
+    }
+    
+    })
+    
 
     router.put('/SuspensionalFeeData', upload.single('image') ,async (req, res) => {
         console.log("Yes I Am In")
