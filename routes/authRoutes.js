@@ -2291,6 +2291,31 @@ catch (err) {
 }
 
 })
+
+router.put('/UpdatePayType', upload.single('image'), async (req, res) => {
+    console.log(req.body);
+    const {_id,name,category,description} = req.body;
+    try {
+        PayType.findByIdAndUpdate({_id},{ name,category,description }, function(err, result){
+            if(err){
+                res.send(err)
+            }
+            else{
+                res.send(result)
+            }
+        })
+    } catch (err) {
+        return res.status(422).send(err.message)
+     
+    }
+})
+
+router.delete('/DeletePayType', (req, res) => {
+    const { _id } = req.body
+    console.log(_id)
+    PayType.findByIdAndRemove(_id).exec();
+    res.send({ res: "Deleted Sucessfully" })
+})
 // end Pay Type Routes
 
 
@@ -2330,6 +2355,31 @@ catch (err) {
     return res.status(422).send({ error: "error for fetching food data" })
 }
 
+})
+
+router.put('/UpdatePayCategory', upload.single('image'), async (req, res) => {
+    console.log(req.body);
+    const {_id,name,description} = req.body;
+    try {
+        PayCategory.findByIdAndUpdate({_id},{ name,description }, function(err, result){
+            if(err){
+                res.send(err)
+            }
+            else{
+                res.send(result)
+            }
+        })
+    } catch (err) {
+        return res.status(422).send(err.message)
+     
+    }
+})
+
+router.delete('/DeletePayCategory', (req, res) => {
+    const { _id } = req.body
+    console.log(_id)
+    PayCategory.findByIdAndRemove(_id).exec();
+    res.send({ res: "Deleted Sucessfully" })
 })
 // end Pay Category Routes
 
@@ -2371,6 +2421,31 @@ catch (err) {
 }
 
 })
+
+router.put('/UpdateDesignation', upload.single('image'), async (req, res) => {
+    console.log(req.body);
+    const {_id,name,description} = req.body;
+    try {
+        Designation.findByIdAndUpdate({_id},{ name,description }, function(err, result){
+            if(err){
+                res.send(err)
+            }
+            else{
+                res.send(result)
+            }
+        })
+    } catch (err) {
+        return res.status(422).send(err.message)
+     
+    }
+})
+
+router.delete('/DeleteDesignation', (req, res) => {
+    const { _id } = req.body
+    console.log(_id)
+    Designation.findByIdAndRemove(_id).exec();
+    res.send({ res: "Deleted Sucessfully" })
+})
 // end Pay Designation Routes
 
 
@@ -2410,6 +2485,32 @@ catch (err) {
     return res.status(422).send({ error: "error for fetching food data" })
 }
 })
+
+router.put('/UpdatePayScaleType', upload.single('image'), async (req, res) => {
+    console.log(req.body);
+    const {_id,name,description} = req.body;
+    try {
+        PayScaleType.findByIdAndUpdate({_id},{ name,description }, function(err, result){
+            if(err){
+                res.send(err)
+            }
+            else{
+                res.send(result)
+            }
+        })
+    } catch (err) {
+        return res.status(422).send(err.message)
+     
+    }
+})
+
+router.delete('/DeletePayScaleType', (req, res) => {
+    const { _id } = req.body
+    console.log(_id)
+    PayScaleType.findByIdAndRemove(_id).exec();
+    res.send({ res: "Deleted Sucessfully" })
+})
+
 // end Pay Scale Type Routes
 
 
