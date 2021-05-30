@@ -746,8 +746,9 @@ router.post('/StoreVehicleType', upload.single('image'), async (req, res) => {
 router.post('/StoreBankData', upload.single('image'), async (req, res) => {
     console.log(req.body);
     const {bank,school_id} = req.body;
+    const status=1
     try {
-        const Bank_data = new Bank({bank,school_id})
+        const Bank_data = new Bank({bank,school_id,status})
         await Bank_data.save();
         if (Bank_data) {
             console.log("Bank_data")
@@ -2576,5 +2577,38 @@ router.delete('/DeletePayScale', (req, res) => {
     res.send({ res: "Deleted Sucessfully" })
 })
 // end Pay Scale Routes
+
+
+// Update Subects Routes
+router.patch('/UpdateSubjects',upload.single('image'),async(req,res)=>{ 
+       
+    const { IdArray,subjects } = req.body;
+    // console.log(req.body)
+    try{
+    JSON.parse(IdArray).map(async(item,index)=>{
+        var _id =item
+        // console.log(subjects)
+        await Student.findByIdAndUpdate({_id},{subjects}, function(err, result){
+            if(err){
+                console.log(err)
+            }
+            if(JSON.parse(IdArray).length-1==index){
+                res.send(result)
+            }
+            // console.log(result)
+           
+        })
+    })
+
+    
+} catch (err) {
+    console.log(err)
+    return res.status(422).send(err.message)
+ 
+}
+    
+   
+})
+// End Update Subjects Routes
 module.exports = router
 

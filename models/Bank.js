@@ -10,6 +10,9 @@ const BankSchema = new Schema({
     school_id:{
         type:String,  
     }, 
+    status:{
+        type:String,  
+    }, 
 },{timestamps: true}
 )
 mongoose.model('Bank',BankSchema);
