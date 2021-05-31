@@ -2609,6 +2609,28 @@ router.patch('/UpdateSubjects',upload.single('image'),async(req,res)=>{
     
    
 })
+
 // End Update Subjects Routes
+
+// Dashboard Student Count Routes
+
+router.post('/getStudentCount', async (req, res) => {
+    const { session,school_id} = req.body
+    console.log(req.body)
+    try {
+        Academic.count({session,school_id,tc_status:"0"}, function(err, result) {
+            if (err) {
+              console.log(err);
+            } else {
+                console.log(result)
+                res.send({"count":result})
+            }
+          });
+    }
+    catch (err) {
+        return res.status(422).send({ error: "error for fetching food data" })
+    }
+})
+// End Dashboard Student Count Routes
 module.exports = router
 
