@@ -2017,7 +2017,7 @@ router.post('/StoreStudent', upload.fields([{
         const bank = Bank
         if(Bank ==""){
             try {
-                const data = await Receipt.find({receipt_date}).sort({receipt_no:1})
+                const data = await Receipt.find({receipt_date})
                  if (data) {
                      
                  }
