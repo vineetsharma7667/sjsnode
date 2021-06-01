@@ -1986,7 +1986,7 @@ router.post('/StoreStudent', upload.fields([{
        
         if(Bank ==""){
             try {
-                const data = await Receipt.find({receipt_date})
+                const data = await Receipt.find({receipt_date}).sort({createAt:1})
                  if (data) {
                      
                  }
@@ -1997,7 +1997,7 @@ router.post('/StoreStudent', upload.fields([{
              }
         }else{
             try {
-                const data = await Receipt.find({ bank,receipt_date })
+                const data = await Receipt.find({ bank,receipt_date }).sort({createAt:1})
                  if (data) {
                      
                  }
@@ -2017,7 +2017,7 @@ router.post('/StoreStudent', upload.fields([{
         const bank = Bank
         if(Bank ==""){
             try {
-                const data = await Receipt.find({receipt_date})
+                const data = await Receipt.find({receipt_date}).sort({createAt:1})
                  if (data) {
                      
                  }
@@ -2028,7 +2028,7 @@ router.post('/StoreStudent', upload.fields([{
              }
         }else{
             try {
-                const data = await Receipt.find({ bank,receipt_date }).sort({receipt_no:1})
+                const data = await Receipt.find({ bank,receipt_date }).sort({createAt:1})
                  if (data) {
                      
                  }
