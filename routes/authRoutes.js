@@ -139,7 +139,6 @@ router.post('/StoreTcDetails', upload.single('image'), async (req, res) => {
         console.log(req.body)
         try {
                 await TransferCertificate.find({admission_no}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
-                console.log("gfgfdgfdgfdgsadsadadsa",data)
                 res.send(data[0])
             })
         }
@@ -2611,6 +2610,94 @@ router.patch('/UpdateSubjects',upload.single('image'),async(req,res)=>{
 })
 
 // End Update Subjects Routes
+
+//  Fee Recipt By Range Routes
+router.post('/GetFeeReceiptByRange', async (req, res) => {
+    console.log('yes im in' + req.body.FromReceiptNo)
+    const {session,FromReceiptNo,ToReceiptNo } = req.body;
+     
+        try {
+            await Receipt.find({session,receipt_no: { $lte: parseInt(ToReceiptNo)},receipt_no: { $gte: parseInt(FromReceiptNo) }}).exec((err,data)=>{
+                console.log("gfgfdgfdgfdgsadsadadsa",data)
+                res.send(data)
+            })
+         }
+         catch (err) {
+             return res.status(422).send({ error: "error for fetching profile data" })
+         }
+    
+})
+router.patch('/UpdateFeeReceiptByRange',upload.single('image'),async(req,res)=>{ 
+    console.log("Yes I am In "+req.body.bank)
+    const { IdArray,bank,receipt_date } = req.body;
+    
+    if(bank=="" && receipt_date!="" ){
+        try{
+            JSON.parse(IdArray).map(async(item,index)=>{
+                var _id =item
+                // console.log(subjects)
+                await Receipt.findByIdAndUpdate({_id},{receipt_date}, function(err, result){
+                    if(err){
+                        console.log(err)
+                    }
+                    if(JSON.parse(IdArray).length-1==index){
+                        res.send(result)
+                    }
+                    // console.log(result)
+                   
+                })
+            })
+        } catch (err) {
+            console.log(err)
+            return res.status(422).send(err.message)
+         
+        }
+    }else if(receipt_date=="" && bank!=""){
+        try{
+            JSON.parse(IdArray).map(async(item,index)=>{
+                var _id =item
+                // console.log(subjects)
+                await Receipt.findByIdAndUpdate({_id},{bank}, function(err, result){
+                    if(err){
+                        console.log(err)
+                    }
+                    if(JSON.parse(IdArray).length-1==index){
+                        res.send(result)
+                    }
+                    // console.log(result)
+                   
+                })
+            })
+        } catch (err) {
+            console.log(err)
+            return res.status(422).send(err.message)
+         
+        }
+    }
+    else if(receipt_date!="" && bank !=""){
+        try{
+            JSON.parse(IdArray).map(async(item,index)=>{
+                var _id =item
+                // console.log(subjects)
+                await Receipt.findByIdAndUpdate({_id},{bank,receipt_date}, function(err, result){
+                    if(err){
+                        console.log(err)
+                    }
+                    if(JSON.parse(IdArray).length-1==index){
+                        res.send(result)
+                    }
+                    // console.log(result)
+                   
+                })
+            })
+        } catch (err) {
+            console.log(err)
+            return res.status(422).send(err.message)
+         
+        }
+    }    
+})
+// End Fee Recipt By Ranges Routes
 
 // Dashboard Student Count Routes
 
