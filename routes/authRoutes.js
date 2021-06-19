@@ -2821,6 +2821,103 @@ router.post('/SearchOldfeeSecurityRegisterAll', async (req, res) => {
              }
        
     })
+
+
+    // Start Security Register By Range
+    router.post('/StudentStrenghtForSecurityByRange', async (req, res) => {
+        var StudentWithFees=[] 
+        var IndexCounter=0     
+        console.log("yes  am in")      
+            const { session,from,to} = req.body;
+                try {                
+                    await Student.find({admission_no:{$gte:from,$lte:to}}).sort({ admission_no: 1 }).exec((err,dataa)=>{
+                        console.log("gfgfdgfdgfdgsadsadadsa",dataa)
+                        dataa.map((item,index)=>{
+                            var admission_no= item.admission_no
+                            try {
+                                  Receipt.find({ admission_no}).exec((err,data)=>{
+                                    
+                                    if(data[0]!=undefined){
+                                        
+                                        var security_deposit=0
+                                        data.map((itemm,indexx)=>{
+                                                if(itemm.security_fee != '0' )
+                                                {
+                                                security_deposit= itemm.security_fee
+                                                }
+                                         })  
+                                         if(item.tc_status=='1'){
+                                            try {
+                                                 TransferCertificate.find({admission_no}).populate('student').sort({ _id: -1 }).exec((err,TcData)=>{
+                                                    if(TcData !=undefined){
+                                                        IndexCounter=IndexCounter+1
+                                                        if( !JSON.stringify(StudentWithFees).includes(item.admission_no+item.account_no+item.class_name)){
+                                                          StudentWithFees.push({"is_full_free_ship":item.is_full_free_ship,"name":item.name,"name":item.name,"admission_no":admission_no,"account_no":item.account_no,"security_no":item.security_no,"doa":item.date_of_admission,"father_name":item.father_name,"mother_name":item.mother_name,'security_deposit':security_deposit,"unique_key":item.admission_no+item.account_no+item.class_name,"refund":TcData.security_deposit,"tc_no":TcData.tc_no,"cheque_no":TcData.cheque_no,cheque_date:TcData.date_of_tc})
+                                                        }
+                                                        if(dataa.length-1==IndexCounter){
+                                                            res.send(StudentWithFees)
+                                                        }
+                                                      }else{
+                                                        IndexCounter=IndexCounter+1
+                                                        if(dataa.length-1==IndexCounter){
+                                                            res.send(StudentWithFees)
+                                                        }
+                                                      }
+                                                     
+                                            })
+                                            }
+                                            catch (err) {
+                                                return res.status(422).send({ error: "error for fetching food data" })
+                                            }
+    
+                                         }
+                                         else{
+                                            IndexCounter=IndexCounter+1
+                                           if( !JSON.stringify(StudentWithFees).includes(item.admission_no+item.account_no+item.class_name)){
+                              
+                                             StudentWithFees.push({"is_full_free_ship":item.is_full_free_ship,"name":item.name,"name":item.name,"admission_no":admission_no,"account_no":item.account_no,"security_no":item.security_no,"doa":item.date_of_admission,"father_name":item.father_name,"mother_name":item.mother_name,'security_deposit':security_deposit,"unique_key":item.admission_no+item.account_no+item.class_name,"refund":0,"tc_no":'',"cheque_no":'',cheque_date:''})
+                                             console.log(index)
+                                 }
+                                            if(dataa.length-1==IndexCounter){
+                                                res.send(StudentWithFees)
+                                            }
+                                         } 
+                                        }
+                                        else{
+                                            IndexCounter=IndexCounter+1
+                                            if(dataa.length-1==IndexCounter){
+                                                res.send(StudentWithFees)
+                                              }
+                                        }
+                                         
+                                })
+    
+                                //  res.send(data)
+                             }
+                             catch (err) {
+                                 return res.status(422).send({ error: "error for fetching profile data" })
+                             }
+                        
+                        
+                        //    else{
+                        //      if( !JSON.stringify(StudentWithFees).includes(item.admission_no+item.account_no+item.class_name)){
+                        //        StudentWithFees.push({"is_full_free_ship":item.is_full_free_ship,"name":item.name,"admission_no":admission_no,"account_no":item.account_no,"security_no":item.security_no,"doa":Moment(item.date_of_admission).format("DD-MM-YYYY"),"father_name":item.father_name,"mother_name":item.mother_name,"security_deposit":0,"unique_key":item.admission_no+item.account_no+item.class_name,"refund":0,"tc_no":'',"cheque_no":'',cheque_date:''})
+                        //        
+                        //       }
+                        //    }
+    
+                        })
+                        // console.log("Array Data "+JSON.stringify(StudentWithFees))
+                    })
+                    
+                 }
+                 catch (err) {
+                     return res.status(422).send({ error: "error for fetching profile data" })
+                 }
+           
+        })
+
+    // End Security Register By Range
 router.post('/StudentStrenghtForDefaulter', async (req, res) => {
     var studentArray=[]
     var studentArrayWithFee=[]
