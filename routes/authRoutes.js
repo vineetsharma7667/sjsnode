@@ -241,7 +241,7 @@ router.post('/StoreSuspensionalVoucher', upload.single('image'), async (req, res
     router.post('/getSuspensionalFeeWithAdmissionNoZero', async (req, res) => {
         const { admission_no,session} = req.body
     try {
-        const data = await Receipt.find({admission_no,session})
+        const data = await Receipt.find({admission_no})
         if (data) {
             
         }
@@ -2759,10 +2759,12 @@ router.post('/SearchOldfeeSecurityRegisterAll', async (req, res) => {
                                                     if( !JSON.stringify(StudentWithFees).includes(item.admission_no+item.account_no+item.class_name)){
                                                       StudentWithFees.push({"is_full_free_ship":item.is_full_free_ship,"name":item.name,"name":item.name,"admission_no":admission_no,"account_no":item.account_no,"security_no":item.security_no,"doa":item.date_of_admission,"father_name":item.father_name,"mother_name":item.mother_name,'security_deposit':security_deposit,"unique_key":item.admission_no+item.account_no+item.class_name,"refund":TcData.security_deposit,"tc_no":TcData.tc_no,"cheque_no":TcData.cheque_no,cheque_date:TcData.date_of_tc})
                                                     }
+                                                    console.log(index)
                                                     if(dataa.length-1==IndexCounter){
                                                         res.send(StudentWithFees)
                                                     }
                                                   }else{
+                                                    console.log(index)
                                                     IndexCounter=IndexCounter+1
                                                     if(dataa.length-1==IndexCounter){
                                                         res.send(StudentWithFees)
@@ -2789,6 +2791,7 @@ router.post('/SearchOldfeeSecurityRegisterAll', async (req, res) => {
                                      } 
                                     }
                                     else{
+                                        console.log(index)
                                         IndexCounter=IndexCounter+1
                                         if(dataa.length-1==IndexCounter){
                                             res.send(StudentWithFees)
