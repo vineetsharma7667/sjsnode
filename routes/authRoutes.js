@@ -2169,10 +2169,12 @@ router.post('/StoreFine', upload.single('image'), async (req, res) => {
         try {
             const data = await DefaulterMaker.find({admission_no,session})
             if (data) {
-                
+                if(data!=''){
+                    res.send(data[0])
+                }else{
+                    res.send({})
+                }
             }
-            
-            res.send(data[0])
         }
         catch (err) {
             return res.status(422).send({ error: "error for fetching food data" })
@@ -2225,7 +2227,6 @@ router.post('/StoreEmployee', upload.single('image'), async (req, res) => {
         res.send(EmployeeData)
     } catch (err) {
         return res.status(422).send(err.message)
-     
     }
 })
 router.post('/getEmployees', async (req, res) => {
