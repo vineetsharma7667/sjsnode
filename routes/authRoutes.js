@@ -1134,7 +1134,7 @@ router.post('/StoreStudent', upload.fields([{
         const { session,admission_no,school_id} = req.body
         console.log(req.body)
         try {
-             await Academic.find({session,admission_no,school_id,tc_status:0}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+             await Academic.find({admission_no,school_id,tc_status:0}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
                 console.log("gfgfdgfdgfdgsadsadadsa",data)
                 res.send(data)
             })
@@ -2227,6 +2227,7 @@ router.post('/StoreEmployee', upload.single('image'), async (req, res) => {
         res.send(EmployeeData)
     } catch (err) {
         return res.status(422).send(err.message)
+
     }
 })
 router.post('/getEmployees', async (req, res) => {
