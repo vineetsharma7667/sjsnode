@@ -112,7 +112,7 @@ var storage = multer.diskStorage({
 
 router.post('/StoreTcDetails', upload.single('image'), async (req, res) => {
     console.log("yes i am in")
-    const { date_of_tc,date_of_aplication,name,account_no,parents,class_name,section,category,nationality,date_of_admission,dob,house,address,security_deposit,return_mode,bank,tc_no,cheque_no,reason,working_days,present_days,admission_no,is_promoted,promoted_in,result,last_school,result_remark,concession,concession_remark,games_remark,other_remark,conduct,session,tc_status,student_id,academic_id,left_on} = req.body;
+    const { date_of_tc,date_of_cheque,date_of_aplication,name,account_no,parents,class_name,section,category,nationality,date_of_admission,dob,house,address,security_deposit,return_mode,bank,tc_no,cheque_no,reason,working_days,present_days,admission_no,is_promoted,promoted_in,result,last_school,result_remark,concession,concession_remark,games_remark,other_remark,conduct,session,tc_status,student_id,academic_id,left_on} = req.body;
     
     Student.findByIdAndUpdate({_id:student_id},{tc_status}, function(err, resultt){
         if(err){
@@ -125,7 +125,7 @@ router.post('/StoreTcDetails', upload.single('image'), async (req, res) => {
                     res.send(errr)
                 }
                 else{
-                    const Tcdata = new TransferCertificate({student:student_id,academic_id:academic_id,date_of_tc,date_of_aplication,name,account_no,parents,class_name,section,category,nationality,date_of_admission,dob,house,address,security_deposit,return_mode,bank,tc_no,cheque_no,reason,working_days,present_days,admission_no,is_promoted,promoted_in,result,last_school,result_remark,concession,concession_remark,games_remark,other_remark,conduct,session,tc_status,left_on })
+                    const Tcdata = new TransferCertificate({student:student_id,academic_id:academic_id,date_of_tc,date_of_cheque,date_of_aplication,name,account_no,parents,class_name,section,category,nationality,date_of_admission,dob,house,address,security_deposit,return_mode,bank,tc_no,cheque_no,reason,working_days,present_days,admission_no,is_promoted,promoted_in,result,last_school,result_remark,concession,concession_remark,games_remark,other_remark,conduct,session,tc_status,left_on })
                      Tcdata.save();
                     if (Tcdata) {
                         res.send(Tcdata)
@@ -167,9 +167,9 @@ router.post('/StoreTcDetails', upload.single('image'), async (req, res) => {
 
     router.put('/UpdateTcData', upload.single('image') ,async (req, res) => {
         console.log("Yes I Am In")
-        const { _id,date_of_tc,date_of_aplication,name,account_no,parents,class_name,section,category,nationality,date_of_admission,dob,house,address,security_deposit,return_mode,bank,tc_no,cheque_no,reason,working_days,present_days,admission_no,is_promoted,promoted_in,result,last_school,result_remark,concession,concession_remark,games_remark,other_remark,conduct,session,tc_status,student_id,academic_id,left_on} = req.body;
+        const { _id,date_of_tc,date_of_cheque,date_of_aplication,name,account_no,parents,class_name,section,category,nationality,date_of_admission,dob,house,address,security_deposit,return_mode,bank,tc_no,cheque_no,reason,working_days,present_days,admission_no,is_promoted,promoted_in,result,last_school,result_remark,concession,concession_remark,games_remark,other_remark,conduct,session,tc_status,student_id,academic_id,left_on} = req.body;
         // const image = req.file.path
-        TransferCertificate.findByIdAndUpdate({_id},{date_of_tc,date_of_aplication,name,account_no,parents,class_name,section,category,nationality,date_of_admission,dob,house,address,security_deposit,return_mode,bank,tc_no,cheque_no,reason,working_days,present_days,admission_no,is_promoted,promoted_in,result,last_school,result_remark,concession,concession_remark,games_remark,other_remark,conduct,session,tc_status,student_id,academic_id,left_on}, function(err, result){
+        TransferCertificate.findByIdAndUpdate({_id},{date_of_tc,date_of_cheque,date_of_aplication,name,account_no,parents,class_name,section,category,nationality,date_of_admission,dob,house,address,security_deposit,return_mode,bank,tc_no,cheque_no,reason,working_days,present_days,admission_no,is_promoted,promoted_in,result,last_school,result_remark,concession,concession_remark,games_remark,other_remark,conduct,session,tc_status,student_id,academic_id,left_on}, function(err, result){
             if(err){
                 res.send(err)
             }
@@ -2831,12 +2831,10 @@ router.post('/SearchOldfeeSecurityRegisterAll', async (req, res) => {
     // Start Security Register By Range
     router.post('/StudentStrenghtForSecurityByRange', async (req, res) => {
         var StudentWithFees=[] 
-        var IndexCounter=0     
-        console.log("yes  am in")      
+        var IndexCounter=0         
             const { session,from,to} = req.body;
                 try {                
                     await Student.find({admission_no:{$gte:from,$lte:to}}).sort({ admission_no: 1 }).exec((err,dataa)=>{
-                        console.log("gfgfdgfdgfdgsadsadadsa",dataa)
                         dataa.map((item,index)=>{
                             var admission_no= item.admission_no
                             try {
@@ -2857,6 +2855,7 @@ router.post('/SearchOldfeeSecurityRegisterAll', async (req, res) => {
                                                     if(TcData !=undefined){
                                                         IndexCounter=IndexCounter+1
                                                         if( !JSON.stringify(StudentWithFees).includes(item.admission_no+item.account_no+item.class_name)){
+                                                        console.log("tc data "+TcData)
                                                           StudentWithFees.push({"is_full_free_ship":item.is_full_free_ship,"name":item.name,"name":item.name,"admission_no":admission_no,"account_no":item.account_no,"security_no":item.security_no,"doa":item.date_of_admission,"father_name":item.father_name,"mother_name":item.mother_name,'security_deposit':security_deposit,"unique_key":item.admission_no+item.account_no+item.class_name,"refund":TcData.security_deposit,"tc_no":TcData.tc_no,"cheque_no":TcData.cheque_no,cheque_date:TcData.date_of_tc})
                                                         }
                                                         if(dataa.length-1==IndexCounter){
@@ -2895,24 +2894,13 @@ router.post('/SearchOldfeeSecurityRegisterAll', async (req, res) => {
                                               }
                                         }
                                          
-                                })
-    
-                                //  res.send(data)
+                                })                                
                              }
                              catch (err) {
                                  return res.status(422).send({ error: "error for fetching profile data" })
                              }
-                        
-                        
-                        //    else{
-                        //      if( !JSON.stringify(StudentWithFees).includes(item.admission_no+item.account_no+item.class_name)){
-                        //        StudentWithFees.push({"is_full_free_ship":item.is_full_free_ship,"name":item.name,"admission_no":admission_no,"account_no":item.account_no,"security_no":item.security_no,"doa":Moment(item.date_of_admission).format("DD-MM-YYYY"),"father_name":item.father_name,"mother_name":item.mother_name,"security_deposit":0,"unique_key":item.admission_no+item.account_no+item.class_name,"refund":0,"tc_no":'',"cheque_no":'',cheque_date:''})
-                        //        
-                        //       }
-                        //    }
     
-                        })
-                        // console.log("Array Data "+JSON.stringify(StudentWithFees))
+                        })                        
                     })
                     
                  }

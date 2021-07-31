@@ -41,6 +41,9 @@ const TransferCertificateSchema = new Schema({
     date_of_admission:{
         type:String,  
     },
+    date_of_cheque:{
+        type:String, 
+    },
     dob:{
         type:String,  
     },
