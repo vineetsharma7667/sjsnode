@@ -112,7 +112,7 @@ var storage = multer.diskStorage({
 
 router.post('/StoreTcDetails', upload.single('image'), async (req, res) => {
     console.log("yes i am in")
-    const { date_of_tc,date_of_cheque,date_of_aplication,name,account_no,parents,class_name,section,category,nationality,date_of_admission,dob,house,address,security_deposit,return_mode,bank,tc_no,cheque_no,reason,working_days,present_days,admission_no,is_promoted,promoted_in,result,last_school,result_remark,concession,concession_remark,games_remark,other_remark,conduct,session,tc_status,student_id,academic_id,left_on} = req.body;
+    const { date_of_tc,date_of_cheque,date_of_application,name,account_no,parents,class_name,section,category,nationality,date_of_admission,dob,house,address,security_deposit,return_mode,bank,tc_no,cheque_no,reason,working_days,present_days,admission_no,is_promoted,promoted_in,result,last_school,result_remark,concession,concession_remark,games_remark,other_remark,conduct,session,tc_status,student_id,academic_id,left_on} = req.body;
     
     Student.findByIdAndUpdate({_id:student_id},{tc_status}, function(err, resultt){
         if(err){
@@ -125,7 +125,7 @@ router.post('/StoreTcDetails', upload.single('image'), async (req, res) => {
                     res.send(errr)
                 }
                 else{
-                    const Tcdata = new TransferCertificate({student:student_id,academic_id:academic_id,date_of_tc,date_of_cheque,date_of_aplication,name,account_no,parents,class_name,section,category,nationality,date_of_admission,dob,house,address,security_deposit,return_mode,bank,tc_no,cheque_no,reason,working_days,present_days,admission_no,is_promoted,promoted_in,result,last_school,result_remark,concession,concession_remark,games_remark,other_remark,conduct,session,tc_status,left_on })
+                    const Tcdata = new TransferCertificate({student:student_id,academic_id:academic_id,date_of_tc,date_of_cheque,date_of_application,name,account_no,parents,class_name,section,category,nationality,date_of_admission,dob,house,address,security_deposit,return_mode,bank,tc_no,cheque_no,reason,working_days,present_days,admission_no,is_promoted,promoted_in,result,last_school,result_remark,concession,concession_remark,games_remark,other_remark,conduct,session,tc_status,left_on })
                      Tcdata.save();
                     if (Tcdata) {
                         res.send(Tcdata)
@@ -167,9 +167,9 @@ router.post('/StoreTcDetails', upload.single('image'), async (req, res) => {
 
     router.put('/UpdateTcData', upload.single('image') ,async (req, res) => {
         console.log("Yes I Am In")
-        const { _id,date_of_tc,date_of_cheque,date_of_aplication,name,account_no,parents,class_name,section,category,nationality,date_of_admission,dob,house,address,security_deposit,return_mode,bank,tc_no,cheque_no,reason,working_days,present_days,admission_no,is_promoted,promoted_in,result,last_school,result_remark,concession,concession_remark,games_remark,other_remark,conduct,session,tc_status,student_id,academic_id,left_on} = req.body;
+        const { _id,date_of_tc,date_of_cheque,date_of_application,name,account_no,parents,class_name,section,category,nationality,date_of_admission,dob,house,address,security_deposit,return_mode,bank,tc_no,cheque_no,reason,working_days,present_days,admission_no,is_promoted,promoted_in,result,last_school,result_remark,concession,concession_remark,games_remark,other_remark,conduct,session,tc_status,student_id,academic_id,left_on} = req.body;
         // const image = req.file.path
-        TransferCertificate.findByIdAndUpdate({_id},{date_of_tc,date_of_cheque,date_of_aplication,name,account_no,parents,class_name,section,category,nationality,date_of_admission,dob,house,address,security_deposit,return_mode,bank,tc_no,cheque_no,reason,working_days,present_days,admission_no,is_promoted,promoted_in,result,last_school,result_remark,concession,concession_remark,games_remark,other_remark,conduct,session,tc_status,student_id,academic_id,left_on}, function(err, result){
+        TransferCertificate.findByIdAndUpdate({_id},{date_of_tc,date_of_cheque,date_of_application,name,account_no,parents,class_name,section,category,nationality,date_of_admission,dob,house,address,security_deposit,return_mode,bank,tc_no,cheque_no,reason,working_days,present_days,admission_no,is_promoted,promoted_in,result,last_school,result_remark,concession,concession_remark,games_remark,other_remark,conduct,session,tc_status,student_id,academic_id,left_on}, function(err, result){
             if(err){
                 res.send(err)
             }
