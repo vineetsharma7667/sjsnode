@@ -2852,11 +2852,10 @@ router.post('/SearchOldfeeSecurityRegisterAll', async (req, res) => {
                                          if(item.tc_status=='1'){
                                             try {
                                                  TransferCertificate.find({admission_no}).populate('student').sort({ _id: -1 }).exec((err,TcData)=>{
-                                                    if(TcData !=undefined){
+                                                    if(TcData[0] !=undefined){
                                                         IndexCounter=IndexCounter+1
                                                         if( !JSON.stringify(StudentWithFees).includes(item.admission_no+item.account_no+item.class_name)){
-                                                        console.log("tc data "+TcData)
-                                                          StudentWithFees.push({"is_full_free_ship":item.is_full_free_ship,"name":item.name,"name":item.name,"admission_no":admission_no,"account_no":item.account_no,"security_no":item.security_no,"doa":item.date_of_admission,"father_name":item.father_name,"mother_name":item.mother_name,'security_deposit':security_deposit,"unique_key":item.admission_no+item.account_no+item.class_name,"refund":TcData.security_deposit,"tc_no":TcData.tc_no,"cheque_no":TcData.cheque_no,cheque_date:TcData.date_of_tc})
+                                                          StudentWithFees.push({"is_full_free_ship":item.is_full_free_ship,"name":item.name,"name":item.name,"admission_no":admission_no,"account_no":item.account_no,"security_no":item.security_no,"doa":item.date_of_admission,"father_name":item.father_name,"mother_name":item.mother_name,'security_deposit':security_deposit,"unique_key":item.admission_no+item.account_no+item.class_name,"refund":TcData[0].security_deposit,"tc_no":TcData[0].tc_no,"cheque_no":TcData[0].cheque_no,cheque_date:TcData[0].date_of_tc})
                                                         }
                                                         if(dataa.length-1==IndexCounter){
                                                             res.send(StudentWithFees)
@@ -2876,11 +2875,13 @@ router.post('/SearchOldfeeSecurityRegisterAll', async (req, res) => {
     
                                          }
                                          else{
+                                             if(admission_no==8710){
+                                                console.log("else part")
+                                             }
                                             IndexCounter=IndexCounter+1
                                            if( !JSON.stringify(StudentWithFees).includes(item.admission_no+item.account_no+item.class_name)){
                               
                                              StudentWithFees.push({"is_full_free_ship":item.is_full_free_ship,"name":item.name,"name":item.name,"admission_no":admission_no,"account_no":item.account_no,"security_no":item.security_no,"doa":item.date_of_admission,"father_name":item.father_name,"mother_name":item.mother_name,'security_deposit':security_deposit,"unique_key":item.admission_no+item.account_no+item.class_name,"refund":0,"tc_no":'',"cheque_no":'',cheque_date:''})
-                                             console.log(index)
                                  }
                                             if(dataa.length-1==IndexCounter){
                                                 res.send(StudentWithFees)
