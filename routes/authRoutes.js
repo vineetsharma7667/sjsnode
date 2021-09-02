@@ -2896,9 +2896,13 @@ router.post('/SearchOldfeeSecurityRegisterAll', async (req, res) => {
                                         }
                                         else{
                                             IndexCounter=IndexCounter+1
+                                            if( !JSON.stringify(StudentWithFees).includes(item.admission_no+item.account_no+item.class_name)){
+                              
+                                                StudentWithFees.push({"is_full_free_ship":item.is_full_free_ship,"name":item.name,"name":item.name,"admission_no":admission_no,"account_no":item.account_no,"security_no":item.security_no,"doa":item.date_of_admission,"father_name":item.father_name,"mother_name":item.mother_name,'security_deposit':security_deposit,"unique_key":item.admission_no+item.account_no+item.class_name,"refund":0,"tc_no":'',"cheque_no":'',cheque_date:''})
+                                    }
                                             if(dataa.length-1==IndexCounter){
                                                 res.send(StudentWithFees)
-                                              }
+                                            }
                                         }
                                          
                                 })                                
