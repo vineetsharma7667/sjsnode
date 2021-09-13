@@ -1291,6 +1291,7 @@ router.post('/StoreStudent', upload.fields([{
         }
        
     })
+    
     router.post('/StudentStrenghtForSecurityClassWise', async (req, res) => {
         console.log('yes im in' + req.body.class_name)
         const {session,section,class_name } = req.body;
@@ -3234,5 +3235,121 @@ router.post('/StoreCSVentry', upload.single('image'), async (req, res) => {
     }
     })
     // End StoreCSVentry Routes
+
+
+
+    // struck of students routes
+    router.post('/StudentStrenghtForSos', async (req, res) => {
+        console.log('yes im in' + req.body.class_name)
+        const {session,section,class_name } = req.body;
+         if(class_name == ""){
+            try {
+                await Academic.find({session}).populate('student').sort({ class_name: 1 }).exec((err,data)=>{
+                    console.log("gfgfdgfdgfdgsadsadadsa",data)
+                    res.send(data)
+                })
+             }
+             catch (err) {
+                 return res.status(422).send({ error: "error for fetching profile data" })
+             }
+        }
+        else if(section ==""){
+            try {
+                if(class_name!="PRE-NUR"){
+                await Academic.find({session,class_name}).populate('student').sort({ section: 1 }).exec((err,data)=>{
+                    console.log("gfgfdgfdgfdgsadsadadsa",data)
+                    res.send(data)
+                })
+                }else{
+                    await Academic.find({session,class_name,section}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+                        console.log("gfgfdgfdgfdgsadsadadsa",data)
+                        res.send(data)
+                    })
+                }
+             }
+             catch (err) {
+                 return res.status(422).send({ error: "error for fetching profile data" })
+            }
+        }
+        else{
+            console.log("yes ia am in vineet")
+            try {
+                await Academic.find({session,class_name,section}).populate('student').sort({ section: -1 }).exec((err,data)=>{
+                    console.log("gfgfdgfdgfdgsadsadadsa",data)
+                    res.send(data)
+                })
+             }
+             catch (err) {
+                 return res.status(422).send({ error: "error for fetching profile data" })
+             }
+        }
+       
+    })
+
+    router.post('/SosStudentList', async (req, res) => {
+        console.log('yes im in' + req.body.class_name)
+        const {session,section,class_name } = req.body;
+         if(class_name == ""){
+            try {
+                await Academic.find({session,tc_status:'sos'}).populate('student').sort({ class_name: 1 }).exec((err,data)=>{
+                    console.log("gfgfdgfdgfdgsadsadadsa",data)
+                    res.send(data)
+                })
+             }
+             catch (err) {
+                 return res.status(422).send({ error: "error for fetching profile data" })
+             }
+        }
+        else if(section ==""){
+            try {
+                if(class_name!="PRE-NUR"){
+                await Academic.find({session,tc_status:'sos',class_name}).populate('student').sort({ section: 1 }).exec((err,data)=>{
+                    console.log("gfgfdgfdgfdgsadsadadsa",data)
+                    res.send(data)
+                })
+                }else{
+                    await Academic.find({session,tc_status:'sos',class_name,section}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+                        console.log("gfgfdgfdgfdgsadsadadsa",data)
+                        res.send(data)
+                    })
+                }
+             }
+             catch (err) {
+                 return res.status(422).send({ error: "error for fetching profile data" })
+            }
+        }
+        else{
+            console.log("yes ia am in vineet")
+            try {
+                await Academic.find({session,tc_status:'sos',class_name,section}).populate('student').sort({ section: -1 }).exec((err,data)=>{
+                    console.log("gfgfdgfdgfdgsadsadadsa",data)
+                    res.send(data)
+                })
+             }
+             catch (err) {
+                 return res.status(422).send({ error: "error for fetching profile data" })
+             }
+        }
+       
+    })
+    router.patch('/updateStruckOff',upload.single('image'),async (req, res) => {    
+        const { student_id,academic_id,tc_status } = req.body;
+        Student.findByIdAndUpdate({_id:student_id},{tc_status }, function(err, result){
+            if(err){
+                res.send(err)
+            }
+            else{
+                Academic.findByIdAndUpdate({_id:academic_id},{tc_status }, function(err, result){
+                    if(err){
+                        res.send(err)
+                    }
+                    else{
+                        res.send(result)
+                    }
+                })
+            }
+        })
+    })
+    // End struck off student routes
 module.exports = router
 
