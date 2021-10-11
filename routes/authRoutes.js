@@ -155,7 +155,7 @@ router.post('/StoreTcDetails', upload.single('image'), async (req, res) => {
         const {admission_no} = req.body
         console.log(req.body)
         try {
-                await TransferCertificate.find({}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+                await TransferCertificate.find({tc_status:'1'}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
                 console.log("gfgfdgfdgfdgsadsadadsa",data)
                 res.send(data)
             })
@@ -164,7 +164,20 @@ router.post('/StoreTcDetails', upload.single('image'), async (req, res) => {
             return res.status(422).send({ error: "error for fetching food data" })
         }
     })
-
+    router.post('/getAllSosStudents', async (req, res) => {
+        const {admission_no} = req.body
+        console.log(req.body)
+        try {
+                await TransferCertificate.find({tc_status:'sos'}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+                console.log("gfgfdgfdgfdgsadsadadsa",data)
+                res.send(data)
+            })
+        }
+        catch (err) {
+            return res.status(422).send({ error: "error for fetching food data" })
+        }
+    })
+    
     router.put('/UpdateTcData', upload.single('image') ,async (req, res) => {
         console.log("Yes I Am In")
         const { _id,date_of_tc,date_of_cheque,date_of_application,name,account_no,parents,class_name,section,category,nationality,date_of_admission,dob,house,address,security_deposit,return_mode,bank,tc_no,cheque_no,reason,working_days,present_days,admission_no,is_promoted,promoted_in,result,last_school,result_remark,concession,concession_remark,games_remark,other_remark,conduct,session,tc_status,student_id,academic_id,left_on} = req.body;
