@@ -3304,7 +3304,7 @@ router.post('/StoreCSVentry', upload.single('image'), async (req, res) => {
         const {session,section,class_name } = req.body;
          if(class_name == ""){
             try {
-                await Academic.find({session,tc_status:'sos'}).populate('student').sort({ class_name: 1 }).exec((err,data)=>{
+                await TransferCertificate.find({session,tc_status:'sos'}).populate('student').sort({ class_name: 1 }).exec((err,data)=>{
                     console.log("gfgfdgfdgfdgsadsadadsa",data)
                     res.send(data)
                 })
@@ -3316,12 +3316,12 @@ router.post('/StoreCSVentry', upload.single('image'), async (req, res) => {
         else if(section ==""){
             try {
                 if(class_name!="PRE-NUR"){
-                await Academic.find({session,tc_status:'sos',class_name}).populate('student').sort({ section: 1 }).exec((err,data)=>{
+                await TransferCertificate.find({session,tc_status:'sos',class_name}).populate('student').sort({ section: 1 }).exec((err,data)=>{
                     console.log("gfgfdgfdgfdgsadsadadsa",data)
                     res.send(data)
                 })
                 }else{
-                    await Academic.find({session,tc_status:'sos',class_name,section}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
+                    await TransferCertificate.find({session,tc_status:'sos',class_name,section}).populate('student').sort({ _id: -1 }).exec((err,data)=>{
                         console.log("gfgfdgfdgfdgsadsadadsa",data)
                         res.send(data)
                     })
